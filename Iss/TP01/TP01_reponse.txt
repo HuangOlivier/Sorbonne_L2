@@ -1,0 +1,95 @@
+---------------------------------
+ISS - Initiation aux Systèmes d’exploitation et au Shell
+LU2IN020 - TP 01 : Introduction au Bash
+---------------------------------
+
+
+========================================
+EXERCICE 3 : Jeu de piste historique
+========================================
+
+
+
+Question 1 :
+-------------
+
+$ wget http://julien.sopena.fr/LU2IN020-TP_01-EXO_03.tgz
+
+
+Question 2 :
+-------------
+
+$ tar xzf LU2IN020-TP_01-EXO_03.tgz
+
+
+Question 3 :
+-------------
+
+$ rm LU2IN020-TP_01-EXO_03.tgz
+
+Question 4 :
+-------------
+
+Etape_1: contient '63'
+
+$ cat ./Livre*/E63
+
+
+Etape_2 : exactement 8 lettres qui finit par 'e'
+
+$ cat ???????e
+
+
+Etape_3 : toutes les années multiples de 3 du 6ème siècle après J.-C.
+
+$ cat {501..597..3}AD
+
+Etape_4 :
+
+$ cat *[aeiouy]*[aeiouy]*[aeiouy]*[aeiouy]*
+
+Solution du jeux de piste: "J'apprecie les fruits au sirop."
+
+
+========================================
+EXERCICE 4 : Du son en boucle
+========================================
+
+Question 1 :
+-------------
+
+$ wget http://julien.sopena.fr/LU2IN020-TP_01-EXO_04.tgz 
+$ tar xzf LU2IN020-TP_01-EXO_04.tgz 
+$ rm LU2IN020-TP_01-EXO_04.tgz
+
+Question 2 :
+-------------
+
+$ rm -f *.log
+
+Question 3 :
+-------------
+
+$ rm -f error.flac  \*.flac
+
+Question 5 :
+-------------
+$ ls 1001_Albums_You_Must_Hear_Before_You_Die/*-[A-Za-z]-*.flac
+
+Question 6 :
+-------------
+
+for test in 1001_Albums_You_Must_Hear_Before_You_Die/*.flac
+do
+	count=$((count + 1))
+done
+
+echo "il y a $count albums" 
+
+Question 7,8 :
+-------------
+dans infos_1001_album.sh
+
+Question 9 :
+-------------
+dans sort_album_by_year.sh
