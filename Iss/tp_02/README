@@ -1,0 +1,116 @@
+---------------------------------
+ISS - Initiation aux Systèmes d’exploitation et au Shell
+LU2IN020 - TP 02 :	 Introduction à la notion de processus
+---------------------------------
+
+========================================
+EXERCICE 1 : Question de nom
+========================================
+
+Question 1 :
+-------------
+```bash
+$ wget http://julien.sopena.fr/LU2IN020-TP_02.tgz
+$ tar -xzf LU2IN020-TP_02.tgz
+```
+
+Question 2 :
+-------------
+```bash
+$ cat mon_test.c
+$ gcc mon_test.c -o mon_test
+```
+
+Question 3 :
+-------------
+
+```bash
+$ ./mon_test 5 -> false
+$ ./mon_test 10 15  -> true
+$ ./mon_test -> "Usage : mon_test <un_entier>"
+```
+
+Question 4 :
+-------------
+```bash
+$ mv mon_test est_il_pair
+```
+
+Sans argument, il fonctionne bien, mais s'il y a plus de deux arguments, il n'utilise que le deuxième.
+
+Question 5 :
+-------------
+
+#include<stdlib.h>
+#include<stdio.h>
+
+int main(int argc, char const *argv[])
+{
+	int i, ret;
+
+	if (argc != 2) {
+		printf("Usage : %s <un_entier>\n", argv[0]);
+		exit(-1);
+	}
+
+	printf("Il %s pair\n", atoi(argv[1]) % 2 ? "n'est pas" : "est");
+
+	return 0;
+}
+
+========================================
+EXERCICE 2 : Et PATH le chemin
+========================================
+
+Question 1 :
+-------------
+```bash
+cp exo1/est_il_pair exo2/est_il_pair
+```
+Question 2 :
+-------------
+
+Dans la commande, il n’y a pas de chemin, donc elle regarde dans les commandes Bash. Comme elle n'y trouve pas non plus, elle vérifie le $PATH, où elle ne trouve pas est_il_pair, ce qui entraîne une erreur.
+
+Question 3 :
+-------------
+```bash
+PATH_OLD=$PATH
+PATH=/users/nfs/Etu2/21204512/Bureau/L2/LU2IN020/tp_02/exo2:$PATH
+```
+
+Question 6 :
+-------------
+
+S'il y a un fichier exécutable avec le même nom qu'une autre commande dans le $PATH, c'est le fichier exécutable dans le dossier qui sera exécuté.
+
+========================================
+Exercice 3 : Une histoire de famille
+========================================
+
+Question 1 :
+-------------
+dans fils.sh
+
+Question 2 :
+-------------
+dans pere.sh
+
+Question 3 :
+-------------
+Non, il y aura toujours autant de processus créés.
+
+Question 4 :
+-------------
+Dans pere.sh
+
+========================================
+Exercice 4 : Scripts paramétrés
+========================================
+
+Question 1,2 :
+-------------
+Dans exo_02/pere.sh
+
+
+
