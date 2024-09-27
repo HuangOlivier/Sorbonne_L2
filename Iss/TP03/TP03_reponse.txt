@@ -1,0 +1,133 @@
+---------------------------------
+ISS - Initiation aux Systèmes d’exploitation et au Shell
+LU2IN020 - TP 03 – Les points d’entrée pour les données d’un script
+Andre Bertok - Oliver Huang
+---------------------------------
+
+========================================
+EXERCICE 1 : Un peu de C
+========================================
+
+Question 3 :
+-------------
+
+$ helloYou Pierre Sylvain Étienne Moustache Manon Lanza Maxime Biaggi
+
+Le programme affiche les prénoms et noms séparément sur deux lignes différentes
+Il faut mettre les noms et prénoms composés entre guillemets
+
+$ helloYou Pierre Sylvain "Étienne Moustache" "Manon Lanza" "Maxime Biaggi"
+
+========================================
+EXERCICE 2 : L’addition s’il vous plait
+========================================
+
+Question 2 :
+-------------
+$ type true
+true est une primitive du shell
+
+$ type false
+false est une primitive du shell
+
+c'est donc des fonciton builtin
+
+Question 4 :
+-------------
+
+Le nombre total de processus créés sera :
+    1 pour le bash
+    + 1 processus pour le script 
+    + 1 processus pour chaque appel à somme.
+
+
+Question 5 :
+-------------
+
+voir addition.sh
+
+========================================
+EXERCICE 3 : L’environnement c’est durable
+========================================
+
+Question 1 :
+-------------
+depuis pwd = /users/Etu2/21204512/Bureau/L2/LU2IN020/tp_03
+
+$ ./monEnvironnement
+/users/Etu2/21204512 
+/usr/local/idea-IC-212.5080.55/bin:/usr/local/pycharm-edu-2022.2.2/bin:/usr/local/idea-IC-212.5080.55/bin:/usr/local/pycharm-edu-2022.2.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games 
+/users/Etu2/21204512/Bureau/L2/LU2IN020/tp_03 
+
+depuis pwd = /users/Etu2/21204512/Bureau/L2
+
+$ ./LU2IN020/tp_03/monEnvironnement
+/users/Etu2/21204512 
+/usr/local/idea-IC-212.5080.55/bin:/usr/local/pycharm-edu-2022.2.2/bin:/usr/local/idea-IC-212.5080.55/bin:/usr/local/pycharm-edu-2022.2.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games 
+/users/Etu2/21204512/Bureau/L2 
+
+On constate que seule la variable PWD change en fonction du répertoire d'où le programme est exécuté.
+
+Question 2 :
+-------------
+
+$ monEnvironnement
+(null) 
+(null) 
+(null) 
+
+$ export TEST_1="J'existe"
+$ monEnvironnement
+J'existe 
+(null) 
+(null)
+
+$ monEnvironnement
+J'existe 
+(null) 
+(null)
+
+$ TEST_2="J'existe" monEnvironnement
+J'existe 
+J'existe 
+(null)
+
+$ monEnvironnement
+J'existe 
+(null) 
+(null)
+
+La variable TEST_2 n'est visible que lors de l'exécution de monEnvironnement dans la même ligne où elle est définie, car elle est affectée localement pour cette exécution uniquement.
+
+Question 3 :
+-------------
+
+Lorsque vous lancez env, vous pouvez voir que la variable TEST_1 est bien présente, mais TEST_2 ne l'est pas car elle n'a pas été exportée dans l'environnement global.
+
+$ env
+[...]
+TEST_1=J'existe
+
+Question 4 :
+-------------
+
+$ type env
+env est haché (/usr/bin/env)
+
+La commande env n’est pas un builtin, car elle est une commande externe située dans /usr/bin/env. Elle crée un nouveau processus pour gérer les variables d'environnement sans affecter le shell parent, contrairement aux commandes internes comme export qui modifient directement l'environnement du shell en cours.
+
+Question 5 :
+-------------
+Après avoir supprimé la variable TEST_1 avec unset, elle n'est plus visible dans la liste des variables d'environnement.
+
+$ unset TEST_1
+$ env
+# TEST_1 a bien disparu
+
+Question 6 :
+-------------
+
+$ type unset
+unset est une primitive du shell
+
+unset est une commande interne (builtin) du shell car elle agit directement sur l'environnement du shell et permet de supprimer des variables d'environnement. Une commande externe ne pourrait pas modifier l'environnement du shell parent.
