@@ -1,4 +1,11 @@
-// Andre Bertok && Oliver Huang
+/*
+Voici le fichier pour le code de l'atelier 3 au lieu du rendu 3, 
+car nous avons complété l'atelier comme convenu. 
+Merci encore de nous permettre de rendre l'atelier au lieu du rendu
+
+Andre Bertok, Oliver Huang
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
