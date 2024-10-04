@@ -1,0 +1,135 @@
+Exercice 1:
+
+Question 2)
+
+le program prend deux arguments, le deuxieme argument va etre une clé,
+puis le program va lire le flux stdin et si le char est entre 'a' et 'z'
+alors il va faire l'algorithme de cesar avec la clé qui etais l'argument
+
+question 3)
+
+quand on fait execute le le fichier compiler le programme va attendre
+une entré clavier(stdin), puis quand on appuie sur entré il va executer l'algo 
+de cesar sur le text dans le stdin
+
+question 4)
+
+for i in {1..26}; do echo $i; ./a.out $i < fenetre_s
+ur_coquillage/part1; done
+1
+Lp Blds n'pde xêxp dzfd Wtyozhd !!!
+2
+Lq Bmet o'qef yêyq eage Wuzpaie !!!
+3
+Lr Bnfu p'rfg zêzr fbhf Wvaqbjf !!!
+4
+Ls Bogv q'sgh aêas gcig Wwbrckg !!!
+5
+Lt Bphw r'thi bêbt hdjh Wxcsdlh !!!
+6
+Lu Bqix s'uij cêcu ieki Wydtemi !!!
+7
+Lv Brjy t'vjk dêdv jflj Wzeufnj !!!
+8
+Lw Bskz u'wkl eêew kgmk Wafvgok !!!
+9
+Lx Btla v'xlm fêfx lhnl Wbgwhpl !!!
+10
+Ly Bumb w'ymn gêgy miom Wchxiqm !!!
+11
+Lz Bvnc x'zno hêhz njpn Wdiyjrn !!!
+12
+La Bwod y'aop iêia okqo Wejzkso !!!
+13
+Lb Bxpe z'bpq jêjb plrp Wfkaltp !!!
+14
+Lc Byqf a'cqr kêkc qmsq Wglbmuq !!!
+15
+Ld Bzrg b'drs lêld rntr Whmcnvr !!!
+16
+Le Bash c'est même sous Windows !!!
+17
+Lf Bbti d'ftu nênf tpvt Wjoepxt !!!
+18
+Lg Bcuj e'guv oêog uqwu Wkpfqyu !!!
+19
+Lh Bdvk f'hvw pêph vrxv Wlqgrzv !!!
+20
+Li Bewl g'iwx qêqi wsyw Wmrhsaw !!!
+21
+Lj Bfxm h'jxy rêrj xtzx Wnsitbx !!!
+22
+Lk Bgyn i'kyz sêsk yuay Wotjucy !!!
+23
+Ll Bhzo j'lza têtl zvbz Wpukvdz !!!
+24
+Lm Biap k'mab uêum awca Wqvlwea !!!
+25
+Ln Bjbq l'nbc vêvn bxdb Wrwmxfb !!!
+26
+Lo Bkcr m'ocd wêwo cyec Wsxnygc !!!
+
+donc la clé est 16
+
+Question 5) 
+for i in {1..9}; do 
+    ./a.out 16 < fenetre_sur_coquillage/part$i >> news.txt; 
+done
+
+Exercice 2:
+
+Question 1)
+
+telechargement.sh
+for i in 0{0..9} {10..99}; do
+    wget -P / http://julien.sopena.fr/chunks/data.$i
+done
+
+question 2)
+
+for i in 0{0..9} {10..99}; do cat data.$i >> exec; done
+
+question 3)
+
+$ file exec
+exec: JPEG image data, Exif standard: [TIFF image data, little-endian, direntries=0], baseline, precision 8, 650x897, components 3
+
+$ mv exec img.jpeg
+
+question 4)
+
+$ [ $(($RANDOM % 6)) == 0 ] && echo "You lost everything"  || echo "WIN"
+
+Exercice 3:
+
+question 1)
+
+$ wc -m < test
+
+question 2)
+
+#! /bin/bash
+nom=""
+nomTaille=0
+for i in $1/*; do
+    if test $(wc -m < $i) -gt $nomTaille; then
+        nomTaille=$(wc -m < $i)
+        nom=$i
+    fi
+done
+
+echo $nom $nomTaille
+
+question 3)
+
+dans select.sh
+$ bash select.sh dico selection
+
+question 4)
+
+$ cd selection; ls
+bien  parti  pour  valider
+
+
+
+
