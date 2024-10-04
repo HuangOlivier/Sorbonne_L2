@@ -109,8 +109,15 @@ $ wc -m < test
 question 2)
 
 #! /bin/bash
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <Dossier>"
+    exit 1
+fi
+
 nom=""
 nomTaille=0
+
 for i in $1/*; do
     if test $(wc -m < $i) -gt $nomTaille; then
         nomTaille=$(wc -m < $i)
@@ -118,12 +125,30 @@ for i in $1/*; do
     fi
 done
 
-echo $nom $nomTaille
+echo $nom 
+
 
 question 3)
 
-dans select.sh
+#! /bin/bash
+
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <source> <destination>"
+    exit 1
+fi
+
+
+for i in {1..4}; do
+    biggest=$(bash biggest.sh $1)
+    mv $biggest $2
+    echo $biggest vers $2
+done
+
 $ bash select.sh dico selection
+dico_copie/bien vers selection
+dico_copie/pour vers selection
+dico_copie/valider vers selection
+dico_copie/parti vers selection
 
 question 4)
 
