@@ -9,8 +9,9 @@ nom=""
 nomTaille=0
 
 for i in $1/*; do
-    if test $(wc -m < $i) -gt $nomTaille; then
-        nomTaille=$(wc -m < $i)
+    taille=$(wc -m < "$i")
+    if test $taille -gt $nomTaille; then
+        nomTaille=$taille
         nom=$i
     fi
 done

@@ -8,8 +8,6 @@ fi
 
 for i in {1..4}; do
     biggest=$(bash biggest.sh $1)
-
-    mv $biggest $2
-
-    echo $biggest vers $2
+    mv "$biggest" "$2"
+    echo "$biggest" vers "$2"
 done
