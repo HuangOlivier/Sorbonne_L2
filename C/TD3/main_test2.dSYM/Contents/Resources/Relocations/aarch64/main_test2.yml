@@ -1,0 +1,25 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     main_test2
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100002D20, symSize: 0x248 }
+  - { offsetInCU: 0x41, offset: 0x41, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0x0, symBinAddr: 0x100002D20, symSize: 0x248 }
+  - { offsetInCU: 0x26, offset: 0x19E, size: 0x8, addend: 0x0, symName: _creer_animal, symObjAddr: 0x0, symBinAddr: 0x100002F68, symSize: 0xE8 }
+  - { offsetInCU: 0xBB, offset: 0x233, size: 0x8, addend: 0x0, symName: _creer_animal, symObjAddr: 0x0, symBinAddr: 0x100002F68, symSize: 0xE8 }
+  - { offsetInCU: 0x10D, offset: 0x285, size: 0x8, addend: 0x0, symName: _ajouter_en_tete_animal, symObjAddr: 0xE8, symBinAddr: 0x100003050, symSize: 0xBC }
+  - { offsetInCU: 0x143, offset: 0x2BB, size: 0x8, addend: 0x0, symName: _ajouter_animal, symObjAddr: 0x1A4, symBinAddr: 0x10000310C, symSize: 0x138 }
+  - { offsetInCU: 0x19F, offset: 0x317, size: 0x8, addend: 0x0, symName: _enlever_animal, symObjAddr: 0x2DC, symBinAddr: 0x100003244, symSize: 0x120 }
+  - { offsetInCU: 0x217, offset: 0x38F, size: 0x8, addend: 0x0, symName: _liberer_liste_animaux, symObjAddr: 0x3FC, symBinAddr: 0x100003364, symSize: 0x54 }
+  - { offsetInCU: 0x23F, offset: 0x3B7, size: 0x8, addend: 0x0, symName: _compte_animal_rec, symObjAddr: 0x450, symBinAddr: 0x1000033B8, symSize: 0x54 }
+  - { offsetInCU: 0x267, offset: 0x3DF, size: 0x8, addend: 0x0, symName: _compte_animal_it, symObjAddr: 0x4A4, symBinAddr: 0x10000340C, symSize: 0x4C }
+  - { offsetInCU: 0x29D, offset: 0x415, size: 0x8, addend: 0x0, symName: _afficher_ecosys, symObjAddr: 0x4F0, symBinAddr: 0x100003458, symSize: 0x440 }
+  - { offsetInCU: 0x324, offset: 0x49C, size: 0x8, addend: 0x0, symName: _clear_screen, symObjAddr: 0x930, symBinAddr: 0x100003898, symSize: 0x1C }
+  - { offsetInCU: 0x339, offset: 0x4B1, size: 0x8, addend: 0x0, symName: _bouger_animaux, symObjAddr: 0x94C, symBinAddr: 0x1000038B4, symSize: 0x10 }
+  - { offsetInCU: 0x35D, offset: 0x4D5, size: 0x8, addend: 0x0, symName: _reproduce, symObjAddr: 0x95C, symBinAddr: 0x1000038C4, symSize: 0x14 }
+  - { offsetInCU: 0x38F, offset: 0x507, size: 0x8, addend: 0x0, symName: _rafraichir_proies, symObjAddr: 0x970, symBinAddr: 0x1000038D8, symSize: 0x14 }
+  - { offsetInCU: 0x3C1, offset: 0x539, size: 0x8, addend: 0x0, symName: _animal_en_XY, symObjAddr: 0x984, symBinAddr: 0x1000038EC, symSize: 0x1C }
+  - { offsetInCU: 0x405, offset: 0x57D, size: 0x8, addend: 0x0, symName: _rafraichir_predateurs, symObjAddr: 0x9A0, symBinAddr: 0x100003908, symSize: 0x14 }
+  - { offsetInCU: 0x437, offset: 0x5AF, size: 0x8, addend: 0x0, symName: _rafraichir_monde, symObjAddr: 0x9B4, symBinAddr: 0x10000391C, symSize: 0x10 }
+  - { offsetInCU: 0x45B, offset: 0x5D3, size: 0x8, addend: 0x0, symName: _ecrire_ecosys, symObjAddr: 0x9C4, symBinAddr: 0x10000392C, symSize: 0x1A8 }
+  - { offsetInCU: 0x4B7, offset: 0x62F, size: 0x8, addend: 0x0, symName: _lire_ecosys, symObjAddr: 0xB6C, symBinAddr: 0x100003AD4, symSize: 0x2A8 }
+...

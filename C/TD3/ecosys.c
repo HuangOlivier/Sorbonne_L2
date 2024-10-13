@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ecosys.h"
-
+#include <string.h>
 
 
 /* PARTIE 1*/
@@ -192,3 +192,70 @@ void rafraichir_monde(int monde[SIZE_X][SIZE_Y]){
 
 
 }
+
+void ecrire_ecosys (const char *nom_fichier, Animal *liste_predateur, Animal *liste_proie) {
+    FILE *f = fopen(nom_fichier, "w");
+    fprintf(f, "<proies>\n");
+    Animal *tmp = liste_proie;
+
+    while (tmp != NULL) {
+        fprintf(f,"x=%d y=%d dir =[%d %d] e=%f\n", tmp->x, tmp->y, tmp->dir[0], tmp->dir[1], tmp->energie);
+        tmp=tmp->suivant;
+    }
+    fprintf(f, "</proies>\n");
+
+    fprintf(f, "<predateurs>\n");
+    tmp=liste_predateur;
+    while (tmp != NULL) {
+        fprintf(f,"x=%d y=%d dir =[%d %d] e=%f\n", tmp->x, tmp->y, tmp->dir[0], tmp->dir[1], tmp->energie);
+        tmp=tmp->suivant;
+    }
+    fprintf(f, "</predateurs>");
+
+
+    fclose(f);
+}
+
+void lire_ecosys (const char *nom_fichier, Animal **liste_predateur, Animal **liste_proie) {
+    FILE *f = fopen(nom_fichier, "r");
+
+    char longeur[256];
+    int x, y;
+    float energie;
+    int dir[2];
+    int proie=0;
+    int predateur=0;
+
+    while (fgets(longeur,256,f)) {
+      
+      if(strcmp(longeur, "<proies>\n")==0) proie=1;
+      if(strcmp(longeur, "</proies>\n")==0) proie=0;
+
+      if(strcmp(longeur, "<predateurs>\n")==0) predateur=1;
+      if(strcmp(longeur, "</predateurs>\n")==0) predateur=0;
+      
+      if (proie==1 || predateur ==1) {
+        sscanf(longeur, "x=%d y=%d dir =[%d %d] e=%f", &x, &y, &dir[1], &dir[2], &energie);
+        Animal *na = (Animal *)malloc(sizeof(Animal));  
+        na->x = x;
+        na->y = y;
+        na->energie = energie;
+        na->dir[0] = dir[0];
+        na->dir[1] = dir[1];
+        na->suivant = NULL;
+
+        if (predateur==1) {
+          na->suivant = *liste_predateur;
+          (*liste_predateur)=na;
+        }else {
+          na->suivant = *liste_proie;
+          (*liste_proie)=na;
+        }
+        
+      }
+      
+    }
+
+    fclose(f);
+}
+
