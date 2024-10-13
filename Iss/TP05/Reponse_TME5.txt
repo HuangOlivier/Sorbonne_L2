@@ -1,32 +1,51 @@
-exo 1
+---------------------------------
+ISS - Initiation aux Systèmes d’exploitation et au Shell
+LU2IN020 - TP 05 – Combinaison de commandes avec les tubes
+Andre Bertok
+---------------------------------
+
+========================================
+EXERCICE 1 : What does the Tux say ?
+========================================
+
+question 2
+-------------
+
+$ git clone https://github.com/schacon/cowsay.git
 
 question 3
-bash install.sh ~/usr
+-------------
+$ bash install.sh ~/usr
+$ rm -r cowsay
 
 quesiton 4
+-------------
 
-nano .bashrc
-on rajoute PATH=/users/Etu2/21204512/usr/bin:$PATH
+$ nano .bashrc
+
+# On rajoute 
+PATH=/users/Etu2/21204512/usr/bin:$PATH
+
+$ source ~/.bashrc
 
 question 5
+-------------
 
-
-read -p "[1] VF [2] VO: " v
+-jungle.sh-
+read -p "[1] VF [2] VO: " choix_lang
 
 IFS="," 
-while read mot1 mot2 mot3; do 
-      
-    echo $mot1 $mot2 $mot3 $v
-    if [ $v -eq 1 ]; then
-        cowsay -f $mot1 $mot2
+while read animal son_fr son_en; do 
+    if [ $choix_lang -eq 1 ]; then
+        cowsay -f $animal $son_fr
     fi
-    if [ $v -eq 2 ]; then
-        cowsay -f $mot1 $mot3
+    if [ $choix_lang -eq 2 ]; then
+        cowsay -f $animal $son_en
     fi
 done < $1
 
+$ bash jungle.sh blabla.csv
 
-21204512@ppti-14-307-07:~/Bureau/L2/LU2IN020/tp_05/exo1$ bash jungle.sh blabla.csv
 [1] VF [2] VO: 1
 udder Mugissement Moo 1
  _____________ 
@@ -53,106 +72,7 @@ bud-frogs Coassement Croak 1
           \__|\ |    (-___-)        | /|__/
           '  '--'    ==`-'==        '--'  '
 bunny Clapissement Squeak 1
- ______________ 
-< Clapissement >
- -------------- 
-  \
-   \   \
-        \ /\
-        ( )
-      .( o ).
-elephant Barrissement Trumpet 1
- ______________ 
-< Barrissement >
- -------------- 
- \     /\  ___  /\
-  \   // \/   \/ \\
-     ((    O O    ))
-      \\ /     \ //
-       \/  | |  \/ 
-        |  | |  |  
-        |  | |  |  
-        |   o   |  
-        | |   | |  
-        |m|   |m|  
-koala Hurlement Wail 1
- ___________ 
-< Hurlement >
- ----------- 
-  \
-   \
-       ___  
-     {~._.~}
-      ( Y )
-     ()~*~()   
-     (_)-(_)   
-meow Feulement Growl 1
- ___________ 
-< Feulement >
- ----------- 
-  \
-   \ ,   _ ___.--'''`--''//-,-_--_.
-      \`"' ` || \\ \ \\/ / // / ,-\\`,_
-     /'`  \ \ || Y  | \|/ / // / - |__ `-,
-    /@"\  ` \ `\ |  | ||/ // | \/  \  `-._`-,_.,
-   /  _.-. `.-\,___/\ _/|_/_\_\/|_/ |     `-._._)
-   `-'``/  /  |  // \__/\__  /  \__/ \
-        `-'  /-\/  | -|   \__ \   |-' |
-          __/\ / _/ \/ __,-'   ) ,' _|'
-         (((__/(((_.' ((___..-'((__,'
-moofasa Grognement Roar 1
- ____________ 
-< Grognement >
- ------------ 
-       \    ____
-        \  /    \
-          | ^__^ |
-          | (oo) |______
-          | (__) |      )\/\
-           \____/|----w |
-                ||     ||
-
-                 Moofasa
-moose Bêlement Bark 1
- ___________ 
-< Bêlement >
- ----------- 
-  \
-   \   \_\_    _/_/
-    \      \__/
-           (oo)\_______
-           (__)\       )\/\
-               ||----w |
-               ||     ||
-sheep Bêlement Bleat 1
- ___________ 
-< Bêlement >
- ----------- 
-  \
-   \
-       __     
-      UooU\.'@@@@@@`.
-      \__/(@@@@@@@@@@)
-           (@@@@@@@@)
-           `YY~~~~YY'
-            ||    ||
-squirrel Sifflement Whistle 1
- ____________ 
-< Sifflement >
- ------------ 
-  \
-     \
-                  _ _
-       | __/|  .~    ~.
-       /oo `./      .'
-      {o__,       {
-        / .  . )    
-        `-` '-'     }
-       .(   _(   )_.'
-      '---.~_ _ _|
-                                                     
-turkey Glougloutement Gobble 1
- ________________ 
+<...>
 < Glougloutement >
  ---------------- 
   \                                  ,+*^^*+___+++_
@@ -190,10 +110,207 @@ tux ??? ??? 1
     /'\_   _/`\
     \___)=(___/
 
-Exercice 2
+========================================
+Exercice 2 : Sur vos traces
+========================================
 
-Question 1)
-last -da > connexions.log
+Question 1
+-------------
 
-Question 2)
+$ last -da > connexions.log
+
+question 2 
+-------------
+
+
+function usage() {
+    echo "Usage : $0 <fichier>"
+    exit 1
+}
+
+if [ $# -ne 1 ]; then
+    usage 
+fi
+
+if test -r $1; then
+    echo "Bon fichier" 
+else 
+    usage
+fi
+
+
+Question 3
+-------------
+
+$ cat connexions.log | head -n -2 | wc -l
+730
+
+question 4
+-------------
+
+lastConnexion=$(cat connexions.log | head -n 1 | cut -d ' ' -f 1)
+if [ $lastConnexion = $(whoami) ]; then 
+    echo "Vous êtes le dernier à vous être connecté à la machine"
+fi
+
+question 5
+-------------
+
+$ cat connexions.log | grep $(whoami) | wc -l
+0
+
+question 6
+-------------
+
+$ cat connexions.log | cut -d ' ' -f  1 | sort | uniq | head -n -5 | wc -l
+163
+
+question 7
+-------------
+
+$ cat connexions.log | cut -c 61- | sort | uniq | grep -v 0.0.0.0 | sort | wc -l
+3
+
+question 8
+-------------
+
+cat "connexions.log" | grep -v '0.0.0.0' | while read -r line; do
+    user=$(echo "$line" | cut -d ' ' -f 1)
+    machine=$(echo "$line" | cut -c 61-)
+
+    # Affiche l'utilisateur et la machine
+    if [ ! -z "$machine" ]; then
+        echo "Utilisateur: $user, Machine: $machine"
+    fi
+done | sort | uniq
+
+question 9
+-------------
+
+Les étudiants se connectent via le réseau de l'université,
+et les connexions externes (SSH) passent également par la PPTI.
+
+question 10
+-------------
+
+$ ssh ssh.ufr-info-p6.jussieu.fr
+<...>
+$ finger
+Login     Name       Tty      Idle  Login Time   Office     Office Phone
+21204512  ANDRE      pts/2          Oct 13 19:25 (88.180.122.205)
+21401550  MARCO      pts/4    2:05  Oct 13 17:59 (37.171.104.77)
+21401550  MARCO      pts/5    1:35  Oct 13 17:39 (37.171.104.77)
+21401550  MARCO      pts/8      13  Oct 13 20:05 (37.169.135.153)
+28510854  JULIEN     pts/7      37  Oct 13 19:41 (78.192.79.75)
+
+question 11
+-------------
+
+$ last -d > connexion2.log
+
+question 12
+-------------
+
+$ bash traces.sh connexion.log
+
+Bon fichier
+Nombre d'entées: 926
+Vous êtes le dernier à vous être connecté à la machine
+nbConnexion de l'utilisateur: 2
+nbConnexionUtilisateur au moins 1 fois: 181
+Nombre de machine distante : 237
+Utilisateur: 1012686, Machine: antalya.ufr-info-p6.jussieu.fr
+Utilisateur: 1013725, Machine: i19-lef01-t2-89-85-251-72.ft.lns.abo.bbox.fr
+Utilisateur: 1013726, Machine: 132.227.125.102
+Utilisateur: 1013730, Machine: 88-171-29-89.subs.proxad.net
+Utilisateur: 1013733, Machine: 163.173.91.229
+Utilisateur: 1013733, Machine: 185.13.106.209
+...
+Utilisateur: grenard, Machine: 134.157.247.244
+Utilisateur: grenard, Machine: 176-179-22-117.abo.bbox.fr
+Utilisateur: grenard, Machine: 87-88-166-251.abo.bbox.fr
+Utilisateur: grenard, Machine: 87-88-184-171.abo.bbox.fr
+Utilisateur: nguyentr, Machine: 242.64.6.93.rev.sfr.net
+Utilisateur: pagliari, Machine: sporkkrool.rsr.lip6.fr
+Utilisateur: root, Machine: althea.ufr-info-p6.jussieu.fr
+Utilisateur: root, Machine: cerise.ufr-info-p6.jussieu.fr
+Utilisateur: root, Machine: teh91-1-78-193-14-190.fbxo.proxad.net
+Utilisateur: thai, Machine: 88-187-49-143.subs.proxad.net
+
+
+========================================
+Exercice 3 : Généalogie
+========================================
+
+question 1
+-------------
+
+$ ps -eF
+
+UID          PID    PPID  C    SZ   RSS PSR STIME TTY          TIME CMD
+root           1       0  0 42383 13792   3 sept.08 ?      00:18:49 /sbin/init
+root           2       0  0     0     0   1 sept.08 ?      00:00:03 [kthreadd]
+root           3       2  0     0     0   0 sept.08 ?      00:00:00 [rcu_gp]
+root           4       2  0     0     0   0 sept.08 ?      00:00:00 [rcu_par_gp]
+root           5       2  0     0     0   0 sept.08 ?      00:00:00 [slub_flushwq]
+root           6       2  0     0     0   0 sept.08 ?      00:00:00 [netns]
+...
+root     3718980       2  0     0     0   0 22:59 ?        00:00:00 [kworker/0:1-cgroup_destroy]
+root     3719030       2  0     0     0   6 22:59 ?        00:00:00 [kworker/6:0]
+root     3719040       2  0     0     0   1 22:59 ?        00:00:00 [kworker/1:1]
+root     3719041       2  0     0     0   0 22:59 ?        00:00:00 [kworker/0:3]
+21204512 3719050 3703167  0  3463  4944   3 23:00 pts/7    00:00:00 ps -eF
+
+question 2
+-------------
+
+$ man ps | wc -w
+7366
+
+$ man mkdir | wc -w
+314
+
+question 3
+-------------
+
+$ PPID2=$(cat /proc/$$/stat | cut -d ' ' -f 4) //equivalent a $PPID
+$ cat /proc/$PPID2/stat | cut -d ' ' -f 2
+(gnome-terminal-)
+
+question 4,5,6
+-------------
+
+$ cd exo3
+$ ./famille
+Il me reste 10 min ... Pouvez vous m'aider à trouver mes ancêtres.
+Pour vous aider voici mon pid 3721707
+
+$ bash genealogie.sh 3721707
+3721705
+3721703
+3721701
+3721700
+3721563
+3721562
+3721456
+753
+1
+
+$ pstree -cp 753
+
+sshd(753)─┬─sshd(471814)───sshd(471850)
+          ├─sshd(3693743)───sshd(3693749)───bash(3693750)
+          ├─sshd(3697190)───sshd(3697207)───ssh(3697208)
+          ├─sshd(3702263)───sshd(3702278)
+          ├─sshd(3702412)───sshd(3702433)─┬─sftp-server(3702434)
+          │                               └─sftp-server(3702435)
+          ├─sshd(3702718)───sshd(3702748)
+          ├─sshd(3704675)───sshd(3704691)
+          ├─sshd(3705623)───sshd(3707621)
+          ├─sshd(3721456)───sshd(3721562)───bash(3721563)───famille(3721700)─┬─famille(3721701)─┬─fam+
+          │                                                                  │                  └─fam+
+          │                                                                  └─famille(3721702)
+          └─sshd(3721596)───sshd(3721603)───bash(3721604)───pstree(3721729)
+
+
 

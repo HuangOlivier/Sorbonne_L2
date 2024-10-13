@@ -1,14 +1,11 @@
-
-read -p "[1] VF [2] VO: " v
+read -p "[1] VF [2] VO: " choix_lang
 
 IFS="," 
-while read mot1 mot2 mot3; do 
-      
-    echo $mot1 $mot2 $mot3 $v
-    if [ $v -eq 1 ]; then
-        cowsay -f $mot1 $mot2
+while read animal son_fr son_en; do 
+    if [ $choix_lang -eq 1 ]; then
+        cowsay -f $animal $son_fr
     fi
-    if [ $v -eq 2 ]; then
-        cowsay -f $mot1 $mot3
+    if [ $choix_lang -eq 2 ]; then
+        cowsay -f $animal $son_en
     fi
 done < $1
