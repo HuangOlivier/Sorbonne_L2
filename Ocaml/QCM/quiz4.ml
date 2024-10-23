@@ -72,3 +72,7 @@ let rec pref (t : 'a btree) : 'a list =
     | Empty -> []
     | Node (e,g,d) -> e::((pref g) @ (pref d))
 ;;
+
+let t2 = Node (1, Node (2, Empty, Empty), Node (3, Empty, Empty)) ;;
+
+type i_or_f = I of int | F of float ;;

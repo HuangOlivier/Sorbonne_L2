@@ -1,0 +1,1 @@
+cat /etc/passwd | grep :1000: | cut -d ':' -f 1
