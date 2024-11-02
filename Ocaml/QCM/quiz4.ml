@@ -76,3 +76,5 @@ let rec pref (t : 'a btree) : 'a list =
 let t2 = Node (1, Node (2, Empty, Empty), Node (3, Empty, Empty)) ;;
 
 type i_or_f = I of int | F of float ;;
+
+match x with Invalid_argument
