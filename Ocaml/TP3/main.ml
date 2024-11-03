@@ -117,6 +117,26 @@ assert ((product [1;2;3] []) = []) ;;
 assert ((product [] [1;2;3]) = []) ;;
 assert ((product [1;2;3] ['a'; 'b']) = [(1, 'a'); (1, 'b'); (2, 'a'); (2, 'b'); (3, 'a'); (3, 'b')]) ;;
 
+
+let rec powerset_rec (l: 'a list) : 'a list list = 
+  match l with 
+    | [] -> [[]]
+    | h::t -> [h] :: (powerset_rec t)
+;;
+
+
+
+powerset_rec [] ;;
+powerset_rec [1;2;3] ;;
+
+
+
+
+
+
+
+
+
 (*
 let rec powerset_rec (l : 'a list) : 'a list list =
   match l with 
