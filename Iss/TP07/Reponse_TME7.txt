@@ -1,0 +1,44 @@
+---------------------------------
+ISS - Initiation aux Systèmes d’exploitation et au Shell
+LU2IN020 - TP 07 – Edition automatisée
+Andre Bertok
+---------------------------------
+
+========================================
+Exercice 1 - Des données à scripter librement
+========================================
+
+question 1
+-------------
+
+rep=0
+for i in $(cat velib.json | tr ',' '\n' | grep "nbbike\"" | cut -d ':' -f 2); do
+    rep=$((rep+$i))
+done
+echo $rep
+
+$> bash scriptVelo.sh
+7145
+
+quesiton 2
+-------------
+
+$> cat arbresremarquablesparis.csv | tail -n +2 | cut -d ';' -f 8 | sort | uniq -c | sort -n | tail -n 1 | tr -s ' ' ' ' | cut -d ' ' -f 3-5
+PARIS 16E ARRDT
+
+queston 2 : Bonus (Pour Rive Gauche)
+-------------
+
+#Option1
+$> cat arbresremarquablesparis.csv | tail -n +2 | cut -d ';' -f 8 | sort | uniq -c | sort -n | grep -E "5E | 6E | 7E | 13E | 14E" | tail -n 1 | tr -s ' ' ' ' | cut -d ' ' -f 3-5
+PARIS 7E ARRDT
+
+#Option2
+$> cat arbresremarquablesparis.csv | grep -E "5E | 6E | 7E | 13E | 14E" | tail -n +2 | cut -d ';' -f 8 | sort | uniq -c | sort -n  | tail -n 1 | tr -s ' ' ' ' | cut -d ' ' -f 3-5
+PARIS 7E ARRDT
+
+question 1 : Bonus (Station avec le plus de vélo disponible)
+-------------
+
+$> cat velib-disponibilite-en-temps-reel.csv | tail -n +2 | sort -t ';' -k 6,7 -n | tail -n 1 | cut -d ';' -f 2
+BNF - Bibliothèque Nationale de France

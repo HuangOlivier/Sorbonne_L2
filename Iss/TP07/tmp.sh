@@ -1,0 +1,1 @@
+cat arbresremarquablesparis.csv | cut -d ';' -f 8 | tail -n +2 | sort -n | uniq -c | sort -n | tail -n 1 | tr -s ' ' ' ' | cut -d ' ' -f 3-4
