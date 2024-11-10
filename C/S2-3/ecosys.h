@@ -4,7 +4,13 @@
 #define SIZE_X 20
 #define SIZE_Y 50
 
-//int p_reproduce_proie = 0.2;
+
+
+
+extern float p_ch_dir;
+extern float p_reproduce_proie;
+extern float p_reproduce_predateur;
+extern int temps_repousse_herbe;
 
 typedef struct _animal {
   int x;

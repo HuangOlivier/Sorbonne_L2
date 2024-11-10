@@ -4,7 +4,10 @@
 #include <string.h>
 #include "ecosys.h"
 
-
+float p_ch_dir=0.01;
+float p_reproduce_proie=0.4;
+float p_reproduce_predateur=0.5;
+int temps_repousse_herbe=-15;
 
 /* PARTIE 1*/
 /* Fourni: Part 1, exercice 4, question 2 */
@@ -42,27 +45,33 @@ void ajouter_animal(int x, int y, float energie, Animal **liste_animal) {
 
 /* A Faire. Part 1, exercice 5, question 5 */
 void enlever_animal(Animal **liste, Animal *animal) {
+	if (animal == NULL || *liste == NULL) return;
+
 
 	if (*liste == animal) {
-		Animal* tmp = *liste;
-		(*liste) = (*liste)->suivant;
+		Animal *tmp = *liste;
+		*liste = (*liste)->suivant;
+		tmp->suivant = NULL;
 		free(tmp);
 		return;
 	}
-	
+
+
 	Animal *current = *liste;
 	while (current != NULL && current->suivant != animal) {
-		current=current->suivant;
+		current = current->suivant;
 	}
 
 	if (current != NULL && current->suivant == animal) {
 		Animal *tmp = current->suivant;
 		current->suivant = tmp->suivant;
-		free (tmp);
+		tmp->suivant = NULL; 
+		free(tmp);
 	}
 
-	return ;
+	return;
 }
+
 
 /* A Faire. Part 1, exercice 6, question 7 */
 Animal* liberer_liste_animaux(Animal *liste) {
@@ -91,7 +100,6 @@ unsigned int compte_animal_it(Animal *la) {
   }
   return cpt;
 }
-
 
 
 /* Part 1. Exercice 5, question 1, ATTENTION, ce code est susceptible de contenir des erreurs... */
@@ -160,7 +168,7 @@ void clear_screen() {
 /* Part 2. Exercice 4, question 1 */
 void bouger_animaux(Animal *la) {
     while(la) {
-		if((rand()/(float)RAND_MAX)<0.2){
+		if((rand()/(float)RAND_MAX)<p_ch_dir){
 			la->dir[0] = rand()%2-1;
 			la->dir[1] = rand()%2-1;
 		}
@@ -177,8 +185,8 @@ void reproduce(Animal **liste_animal, float p_reproduce) {
 	while (tmp) {
 		if ( (rand() / (float)RAND_MAX) <= p_reproduce) {
 			ajouter_animal(tmp->x, tmp->y, tmp->energie/2, liste_animal);
-			(*liste_animal)->energie = (tmp->energie)/2;
-			tmp->energie=(tmp->energie)/2;
+
+			tmp->energie = (tmp->energie) / 2;
 		}
 		tmp=tmp->suivant;
 	}
@@ -188,7 +196,8 @@ void reproduce(Animal **liste_animal, float p_reproduce) {
 
 /* Part 2. Exercice 6, question 1 */
 void rafraichir_proies(Animal **liste_proie, int monde[SIZE_X][SIZE_Y]) {
-    if (*liste_proie == NULL) return;
+	if (*liste_proie == NULL) return;
+
 	Animal *tmp = *liste_proie;
 
 	bouger_animaux (tmp);
@@ -199,20 +208,25 @@ void rafraichir_proies(Animal **liste_proie, int monde[SIZE_X][SIZE_Y]) {
 
 		if (monde[tmp->x][tmp->y] > 0) {
 			tmp->energie += monde[tmp->x][tmp->y];
-			monde[tmp->x][tmp->y] = -15;
+			monde[tmp->x][tmp->y] = temps_repousse_herbe;
 		}
-		if(tmp->energie <= 0) {
-			enlever_animal (liste_proie, tmp);
+
+		if (tmp->energie <= 0) {
+			Animal *to_remove = tmp;
+			tmp = tmp->suivant;  // Move to the next animal before freeing the current one
+			enlever_animal(liste_proie, to_remove);  // Remove and free the current animal
+		} else {
+			tmp = tmp->suivant;  // Only move to the next animal if the current one is alive
 		}
-		tmp = tmp->suivant;
 	}
 	
-	reproduce (liste_proie, 0.2);
+	reproduce (liste_proie, p_reproduce_proie);
 }
 
 /* Part 2. Exercice 7, question 1 */
 Animal *animal_en_XY(Animal *l, int x, int y) {
 	while (l != NULL) {
+		
 		if ( (l->x==x) && (l->y==y)) {
 			return l;
 		}
@@ -234,12 +248,15 @@ void rafraichir_predateurs(Animal **liste_predateur, Animal **liste_proie) {
 	while (tmp_predateur) {
 		tmp_predateur->energie -= 1;
 		
-		Animal *manger = animal_en_XY (tmp_proie, tmp_predateur->x, tmp_predateur->y);
+		Animal *manger = animal_en_XY (*liste_proie, tmp_predateur->x, tmp_predateur->y);
+		
 		while (manger != NULL) {
-			tmp_predateur->energie += manger->energie;
-			enlever_animal (liste_proie, manger);
-			manger = animal_en_XY ( *liste_proie, tmp_predateur->x, tmp_predateur->y);
-		}
+            tmp_predateur->energie += manger->energie;
+            enlever_animal(liste_proie, manger);
+
+            // After removing the prey, set manger to NULL or fetch the next prey
+            manger = animal_en_XY(*liste_proie, tmp_predateur->x, tmp_predateur->y);
+        }
 		
 
 		if(tmp_predateur->energie <= 0) {
@@ -254,7 +271,7 @@ void rafraichir_predateurs(Animal **liste_predateur, Animal **liste_proie) {
 		}
 	}
 
-	reproduce (liste_predateur, 0.8);
+	reproduce (liste_predateur, p_reproduce_predateur);
 }
 
 /* Part 2. Exercice 5, question 2 */
