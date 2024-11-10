@@ -169,8 +169,8 @@ void clear_screen() {
 void bouger_animaux(Animal *la) {
     while(la) {
 		if((rand()/(float)RAND_MAX)<p_ch_dir){
-			la->dir[0] = rand()%2-1;
-			la->dir[1] = rand()%2-1;
+			la->dir[0] = rand()%3-1;
+			la->dir[1] = rand()%3-1;
 		}
 		la->x = (SIZE_X + la->x + la->dir[0]) % SIZE_X;
 		la->y = (SIZE_Y + la->y + la->dir[1]) % SIZE_Y;
@@ -184,13 +184,11 @@ void reproduce(Animal **liste_animal, float p_reproduce) {
 	Animal *tmp = *liste_animal;
 	while (tmp) {
 		if ( (rand() / (float)RAND_MAX) <= p_reproduce) {
-			ajouter_animal(tmp->x, tmp->y, tmp->energie/2, liste_animal);
-
-			tmp->energie = (tmp->energie) / 2;
+			ajouter_animal(tmp->x, tmp->y, tmp->energie/2.0, liste_animal);
+			tmp->energie = (tmp->energie) / 2.0;
 		}
 		tmp=tmp->suivant;
 	}
-
 }
 
 
@@ -207,16 +205,16 @@ void rafraichir_proies(Animal **liste_proie, int monde[SIZE_X][SIZE_Y]) {
 		tmp->energie -= 1;
 
 		if (monde[tmp->x][tmp->y] > 0) {
-			tmp->energie += monde[tmp->x][tmp->y];
+			tmp->energie = tmp->energie + monde[tmp->x][tmp->y];
 			monde[tmp->x][tmp->y] = temps_repousse_herbe;
 		}
 
 		if (tmp->energie <= 0) {
 			Animal *to_remove = tmp;
-			tmp = tmp->suivant;  // Move to the next animal before freeing the current one
-			enlever_animal(liste_proie, to_remove);  // Remove and free the current animal
+			tmp = tmp->suivant;
+			enlever_animal(liste_proie, to_remove);
 		} else {
-			tmp = tmp->suivant;  // Only move to the next animal if the current one is alive
+			tmp = tmp->suivant;
 		}
 	}
 	
@@ -243,7 +241,7 @@ void rafraichir_predateurs(Animal **liste_predateur, Animal **liste_proie) {
 	Animal *tmp_proie = *liste_proie;
 	Animal *predator_remove = NULL;
 
-	bouger_animaux (tmp_predateur);
+	bouger_animaux (*liste_predateur);
 	
 	while (tmp_predateur) {
 		tmp_predateur->energie -= 1;
@@ -259,15 +257,12 @@ void rafraichir_predateurs(Animal **liste_predateur, Animal **liste_proie) {
         }
 		
 
-		if(tmp_predateur->energie <= 0) {
-			predator_remove = tmp_predateur;
-		}
-
-		tmp_predateur=tmp_predateur->suivant;
-
-		if (predator_remove) {
-			enlever_animal(liste_predateur, predator_remove);
-			predator_remove = NULL;
+		if (tmp_predateur->energie < 0){ //Le prédateur meurt si son énergie est inférieur à 0.
+			Animal* tmp = tmp_predateur;
+			tmp_predateur = tmp_predateur->suivant;
+			enlever_animal(liste_predateur, tmp);
+		}else{
+			tmp_predateur = tmp_predateur->suivant;
 		}
 	}
 

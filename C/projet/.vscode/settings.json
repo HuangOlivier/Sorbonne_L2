@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "ecosys.h": "c",
+        "strings.h": "c",
+        "unistd.h": "c",
+        "assert.h": "c",
+        "time.h": "c",
+        "signal.h": "c"
+    }
+}
