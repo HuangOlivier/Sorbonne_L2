@@ -15,9 +15,7 @@ int bitcommun_opt (double x, double y) {
 
     uint64_t a2 = *((uint64_t*)&x);
     uint64_t b2 = *((uint64_t*)&y);
-
-    //printf("%llu %llu \n", a2, b2);
-
+ 
     for (int i = 63; i >= 0; i-=8) {
         if (( (a2 >> i) & 255) == ((b2 >> i) & 255)) {
             res++;
