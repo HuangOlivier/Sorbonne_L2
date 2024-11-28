@@ -1,0 +1,128 @@
+---------------------------------
+ISS - Initiation aux Systèmes d’exploitation et au Shell
+TP 09 – Les signaux
+Andre Bertok
+---------------------------------
+
+========================================
+Exercice 1 : Highlander
+========================================
+
+question 1
+-------------
+
+trap "echo Reception SIGINT" SIGINT
+
+while true; do
+	echo "il ne doit en rester qu'un"
+	sleep 1
+done
+
+question 2
+-------------
+
+$> ./highlander.sh
+
+$> kill $(pgrep highlander) 
+
+Question 3
+-------------
+
+non, car des signaux comme SIGSTOP ne peuvent pas etre redefini avec SIGSTOP
+
+========================================
+Exercice 1 : Dede
+========================================
+
+question 1
+-------------
+
+$> dd if=/dev/urandom of=/tmp/iss bs=1b count=5000000
+5000000+0 enregistrements lus
+5000000+0 enregistrements écrits
+2560000000 octets (2,6 GB, 2,4 GiB) copiés, 7,40753 s, 346 MB/s
+
+question 2
+-------------
+
+$> dd if=/dev/urandom of=/tmp/iss bs=1b count=5000000
+647946+0 enregistrements lus
+647945+0 enregistrements écrits
+331747840 octets (332 MB, 316 MiB) copiés, 0,980834 s, 338 MB/s
+...
+4150163+0 enregistrements lus
+4150162+0 enregistrements écrits
+2124882944 octets (2,1 GB, 2,0 GiB) copiés, 6,14069 s, 346 MB/s
+5000000+0 enregistrements lus
+5000000+0 enregistrements écrits
+2560000000 octets (2,6 GB, 2,4 GiB) copiés, 7,3907 s, 346 MB/s
+
+Sur le deuxieme terminal:
+
+$> kill -s SIGUSR1  $(pgrep -n dd)
+$> kill -s SIGUSR1  $(pgrep -n dd)
+...
+$> kill -s SIGUSR1  $(pgrep -n dd)
+
+
+question 3
+-------------
+
+dd if=/dev/urandom of=/tmp/iss bs=1b count=5000000 &
+
+sleep 1
+kill -s SIGUSR1 $!
+
+wait
+rm /tmp/iss
+
+
+========================================
+Exercice 3 : Ola
+========================================
+
+question 1
+-------------
+
+[ $# -ne 1 ] && echo "usage: $0 <n>" && exit
+
+spaces=""
+if [ $1 -gt 0 ]; then
+	count=$(($1 + 1)) 
+	while [ $count -gt 1 ]; do
+		spaces="$spaces "
+		count=$(($count - 1))
+	done
+fi
+echo "Ola :$spaces O"
+
+if [ $1 -gt 0 ]; then
+	bash "$0" $(($1 - 1))
+fi
+
+question 2
+-------------
+
+[ $# -ne 1 ] && echo "usage: $0 <n>" && exit
+
+
+spaces=""
+count=$(($1 + 1))
+while [ $count -gt 1 ]; do
+	spaces="$spaces "
+	count=$(($count - 1))
+done
+
+if [ $1 -gt 0 ]; then
+	bash "$0" $(($1 - 1)) &
+	child_pid=$!
+fi
+
+for _ in {1..99}; do
+	echo "Ola :${spaces}O"
+	sleep 1
+done
+
+if [ $1 -gt 0 ]; then
+	wait $child_pid
+fi
