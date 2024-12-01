@@ -1,14 +1,19 @@
 digraph a {
  rankdir=LR
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 0[ label ="{0}", color=red ];
 0 -> 0 [ label = "b" ];
+=======
+0[ label ="0", color=red ];
+>>>>>>> Stashed changes
 0 -> 1 [ label = "a" ];
-1[ label ="{0,1}",];
-1 -> 0 [ label = "b" ];
+0 -> 0 [ label = "b, a" ];
+1[ label ="1",];
 1 -> 2 [ label = "a" ];
-2[ label ="{0,1,2}",];
+2[ label ="2",];
 2 -> 3 [ label = "a" ];
+<<<<<<< Updated upstream
 2 -> 0 [ label = "b" ];
 3[ label ="{0,1,2,3}",peripheries=2 ];
 3 -> 4 [ label = "b" ];
@@ -38,5 +43,12 @@ digraph a {
 5[ label ="{0,1,3}",];
 5 -> 4 [ label = "b" ];
 5 -> 3 [ label = "a" ];
+>>>>>>> Stashed changes
+=======
+2 -> 0 [ label = "a" ];
+3[ label ="3",peripheries=2 ];
+3 -> 3 [ label = "b, a" ];
+3 -> 0 [ label = "b, a" ];
+4[ label ="{}", color=red peripheries=2 ];
 >>>>>>> Stashed changes
 }
