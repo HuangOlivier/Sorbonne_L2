@@ -1,0 +1,195 @@
+---------------------------------
+ISS - Initiation aux Systèmes d’exploitation et au Shell
+TP 10 – Concurrence, incohérence et synchronisation
+Andre Bertok
+---------------------------------
+
+========================================
+Exercice 1 : Attention commutation
+========================================
+
+question 1
+-------------
+
+on modifie le .bashrc dans le home et on rajoute
+PATH=/users/nfs/Etu2/21204512/Bureau/L2/LU2IN020/tp_10:/users/Etu2/21204512/usr/bin:$PATH
+
+question 2
+-------------
+
+$> ./ecriture.sh a b c
+$> ./ecriture.sh a b c
+
+$> cat a
+premier 7169
+suivant 7235
+
+$> cat b
+premier 7169
+suivant 7235
+
+$> cat c
+premier 7169
+suivant 7235
+
+question 3
+-------------
+
+$> ./lancement_ecriture.sh
+
+$> cat f1
+premier 7746
+
+$> cat f2
+premier 7745
+suivant 7746
+
+$> cat f3
+premier 7745
+suivant 7746
+
+À un moment donné, l'un des processus perd le processeur. 
+Pendant ce temps, l'autre processus continue son exécution et modifie le même fichier. 
+Lorsque le premier processus récupère le processeur, il écrase  le contenu ignorant le changement fait par l'autre.
+
+
+question 4
+-------------
+
+#! /bin/bash
+
+if [ $# -lt 1 ]; then
+	echo Il faut au moins un parametre
+	exit 1
+fi
+
+for elem in "$@"; do
+	if [ ! -e $elem ]; then
+		sleep 1
+		echo premier $$ > "$elem"
+	else 
+		echo suivant $$ >> "$elem"
+	fi
+done
+
+question 5
+-------------
+
+#! /bin/bash
+
+if [ $# -lt 1 ]; then
+	echo Il faut au moins un parametre
+	exit 1
+fi
+
+for elem in "$@"; do
+	semcmd lock myLock	
+	if [ ! -e $elem ]; then
+		sleep 1
+		echo premier $$ > "$elem"
+	else 
+		echo suivant $$ >> "$elem"
+	fi
+	semcmd unlock myLock
+done
+
+
+$> semcmd create myLock
+$> ./lancement_ecriture.sh
+$> cat f1
+premier 9102
+suivant 9101
+
+$> cat f2
+premier 9102
+suivant 9101
+
+$> cat f3
+premier 9102
+suivant 9101
+
+
+========================================
+Exercice 2 : Ressources multiples
+========================================
+
+
+question 1
+-------------
+
+Deux utilisateurs avec le même identifiant :
+	Processus A vérifie l'absence du login, mais perd le processeur.
+	Processus B ajoute le même login, et A reprend en écrivant à son tour.
+	Résultat : Le login est dupliqué dans login.txt.
+
+Désynchronisation entre fichiers :
+	Processus A écrit un login, puis perd le processeur.
+	Processus B écrit son propre login, mot de passe et nom.
+	A reprend et ajoute ses données dans des lignes désalignées.
+	Résultat : Les informations ne correspondent plus.
+
+
+question 2
+-------------
+
+Ressources critiques: login.txt, pass.txt, nom.txt.
+Sections critiques: La vérification (grep) et l’écriture (echo) dans ces fichiers.
+
+question 3
+-------------
+
+#! /bin/bash
+
+if [ "$#" -ne 3 ]; then
+	echo "Vous devez saisir trois parametres"
+	exit 1
+fi
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] ; then
+	echo "Vous devez saisir un login, un mot de passe et un nom non vide"
+	exit 1
+fi
+
+semcmd lock myLock
+if [ -f login.txt ] && [ ! -z "`grep "^$1$" login.txt`" ] ; then
+	echo "Choisissez un login different de $1"
+	exit 1
+fi
+
+
+echo "$1" >> login.txt
+echo "$2" >> pass.txt
+echo "$3" >> nom.txt
+semcmd unlock myLock
+
+question 4
+-------------
+
+#! /bin/bash
+
+if [ "$#" -ne 3 ]; then
+	echo "Vous devez saisir trois parametres"
+	exit 1
+fi
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ] ; then
+	echo "Vous devez saisir un login, un mot de passe et un nom non vide"
+	exit 1
+fi
+
+
+semcmd lock myLock1
+if [ -f login.txt ] && [ ! -z "`grep "^$1$" login.txt`" ] ; then
+	echo "Choisissez un login different de $1"
+	semcmd unlock myLock1
+	exit 1
+fi
+	
+semcmd lock myLock2
+echo "$1" >> login.txt
+semcmd unlock myLock1
+
+semcmd lock myLock3 
+echo "$2" >> pass.txt
+semcmd unlock myLock2
+
+echo "$3" >> nom.txt
+semcmd unlock myLock3
