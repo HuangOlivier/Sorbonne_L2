@@ -73,7 +73,8 @@ let rec at_path (t:'a btree) (c: int list) : 'a =
 	| (Empty, h::t) -> raise (Invalid_argument "at_path")
 	| (Node (e,g,d), []) -> e
 	| (Node (e,g,d), h::t) -> if h=1 then at_path d t 
-								else at_path g t
+								else if h=0 at_path g t
+								else raise (Invalid_argument "at_path")
 
 
 ;;
