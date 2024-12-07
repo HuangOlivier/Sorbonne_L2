@@ -52,5 +52,7 @@ let sum_left (l: int list) : int =
 ;;
 
 let sum_right (l: int list) : int = 
-	List.fold_left (fun x y -> x+y) 0 l
+	List.fold_right (fun x y -> x+y) l 0
 ;;
+
+assert ((sum_right [3; 7; 2]) = 12);;
