@@ -13,6 +13,34 @@ let rec at_prof_list (n:int) (t : 'a btree) : int list =
 ;;
 
 
+
+let etiq_prof_list (x : 'a) (t : 'a btree) : int list =
+	let rec aux (x: 'a) (t: 'a btree) (acc : int) : int list =
+		match t with 
+		| Empty -> []
+		| Node (e,g,d) -> if e=x then acc::((aux x g (acc+1)) @ (aux x d (acc+1))) else (aux x g (acc+1)) @ (aux x d (acc+1))
+	in aux x t 0
+;;
+
+assert ((etiq_prof_list 3 t_ex) = [1;2]);;
+
+let rec prof_max (t: 'a btree) : int =
+	match t with 
+	| Empty -> -1
+	| Node (e,g,d) -> 1 + max (prof_max g) (prof_max d)
+;;
+
+assert ((prof_max t_ex) = 3);;
+
+let rec max_prof_etiq (x: 'a) (t: 'a btree) : int = 
+	let lst = etiq_prof_list x t in 
+	List.fold_left (fun a b -> if a > b then a else b ) (-1) lst
+;;
+
+assert ((max_prof_etiq 5 t_ex) = 2);;
+assert ((max_prof_etiq 7 t_ex) = 3);;
+
+
 type value = B of bool | I of int;;
 exception TYPE_ERROR of int;;
 
