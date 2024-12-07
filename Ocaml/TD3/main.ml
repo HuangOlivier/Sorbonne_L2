@@ -42,6 +42,11 @@ let rec all_o_sup_f(l : (char list) list) : bool =
 	List.for_all o_sup_f l
 ;;
 
+let dyck (l: char list): bool = 
+	all_o_sup_f (prefixes l)
+;;
+
+
 let sum_left (l: int list) : int = 
 	List.fold_left (fun x y -> x+y) 0 l
 ;;
