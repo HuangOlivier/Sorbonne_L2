@@ -47,6 +47,7 @@ void afficher_livre(Livre* l){
 }
 
 void afficher_biblio(Biblio* b){
+	if (b == NULL) return;
 	afficher_livre(b->L);
 }
 
@@ -106,10 +107,32 @@ Biblio *fusion(Biblio *a, Biblio *b) {
 		inserer_en_tete(a, tmp->num, tmp->titre, tmp->auteur);
 		tmp = tmp->suiv;	
 	}
-	liberer_biblio(b);
+
+	return a;
 }
 
 Biblio *recherche4(Biblio *a) {
-	
+	Biblio* res = creer_biblio();
+
+	Livre* now = a->L;
+	Livre* tmp;
+
+	while(now) {
+		
+		tmp= a->L;
+		int a=0;
+
+		while (tmp && (a==0)) {
+			if ((strcmp(now->titre, tmp->titre)==0) && (strcmp(now->auteur, tmp->auteur))){
+				inserer_en_tete (res, tmp->num, tmp->titre, tmp->auteur);
+				a=1;
+			}
+
+			tmp=tmp->suiv;
+		}
+
+		now=now->suiv;
+	}
+	return res;
 }
 
