@@ -3,8 +3,8 @@
 #include <time.h>
 #include <math.h>
 
-#define N 13
-#define P 6
+#define N 100
+#define P 3
 
 int *alloue_tableau1(int n) {
 	int *res = malloc(sizeof(int)*n);
@@ -58,8 +58,9 @@ int diff2(int *tab, int n) {
 
 
 
+
 int **alloue_matrice(int n){
-	int **res = malloc(sizeof(int)*n);
+	int **res = malloc(sizeof(int*)*n);
 	for (int i=0; i<n; i++){
 		res[i] = malloc(sizeof(int)*n);
 	}
@@ -92,25 +93,137 @@ void afficher_matrice (int **tab, int n) {
 	printf("]\n");
 }
 
+
+
+int all_diff(int **mat, int n){
+	for (int i=0; i<n; i++){
+		for (int j=0; j<n; j++){
+		
+			for (int i2=0; i2<n; i2++){
+				for (int j2=0; j2<n; j2++){
+						if (mat[i][j] == mat[i2][j2] && !(i==i2 && j==j2)) {
+							return 1;
+						}		
+					}
+			}
+			
+		}
+	}
+	return 0;
+}
+
+
+int all_diff2(int **mat, int n, int v){
+	int tab[v];
+	int u=0;
+	for (int i=0; i<n; i++){
+		for (int j=0; j<n; j++){
+			for (int m=0; m<u; m++){
+				if(tab[m] == mat[i][j]) return 1;
+			}
+			tab[u] = mat[i][j];
+			u++;
+		}
+	}
+	return 0;
+}
+
+int** prod(int **a, int **b, int n) {
+	int **t = alloue_matrice(n);
+	for (int i=0; i<n; i++) {
+		for (int j=0; j<n; j++) {
+			t[i][j] = 0;
+			for (int k=0; k<n; k++) {
+				t[i][j] += a[i][k] * b[k][j];
+			}			
+		}
+	}
+	return t;
+}
+
+int **prodOpti(int **a, int **b, int n) {
+	int **t = alloue_matrice(n);
+	for (int i=0; i<n; i++) {
+		for (int j=i; j<n; j++) {
+			t[i][j] = 0;
+			for (int k=i; k<=j; k++){
+				t[i][j] = a[i][k] * b[k][j];
+			}
+		}
+	}
+	return t;
+}
+
+
+clock_t init;
+clock_t final;
+double temps_cpu;
+
+
 int main() {
  	srand(time(NULL));
- 	
+ 	/*
 	int *tab = alloue_tableau1(N);
 	alloue_tableau2(&tab, N);
 	remplir_tableau(tab,N,10);
 	affichageTableau(tab, N);
 	
-	printf("%d %d \n", diff(tab, N), diff2(tab, N));
+	
+	init = clock();
+	diff(tab, N);
+	final = clock();
+	temps_cpu = ((double)(final - init))/CLOCKS_PER_SEC;
+	printf ("diff1 -> %d %f\n", N, temps_cpu ); 
+	
+	
+	init = clock();
+	diff2(tab, N);
+	final = clock();
+	temps_cpu = ((double)(final - init))/CLOCKS_PER_SEC;
+	printf ("diff2 -> %d %f\n", N, temps_cpu );
+	
 	
 	desalloue_tableau(tab);	
+	*/
+	
+	int **t1 = alloue_matrice(P);
+	remplir_matrice(t1, P, 10);
+	
+	int **t2 = alloue_matrice(P);
+	remplir_matrice(t2, P, 10);
+	
+	afficher_matrice(t1, P);
+	afficher_matrice(t2, P);
+	
+
+	
 	
 	/*
-	int **t = alloue_matrice(P);
-	//remplir_matrice(t, P, 5);
-	//afficher_matrice(t, P);
-	desalloue_matrice(t, P);
+	int **res1 = prod(q1 ,q2, P);
+	//afficher_matrice(res1, P);
+	
+	int **res2 = prodOpti(q1 ,q2, P);
+	//afficher_matrice(res2, P);
+	*/
+	/*
+	init = clock();
+	all_diff(t, P);
+	final = clock();
+	temps_cpu = ((double)(final - init))/CLOCKS_PER_SEC;
+	printf ("all_diff1 -> %d %f\n", 500, temps_cpu ); 
+	
+	
+	init = clock();
+	all_diff2(t, P, 500);
+	final = clock();
+	temps_cpu = ((double)(final - init))/CLOCKS_PER_SEC;
+	printf ("all_diff2 -> %d %f\n", 500, temps_cpu );
+	*/
+	
+	desalloue_matrice(t1, P);
+	desalloue_matrice(t2, P);
 	
 	return 0;
-	*/
+	
 	
 }
