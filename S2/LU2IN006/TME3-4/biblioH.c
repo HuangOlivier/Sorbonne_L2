@@ -45,9 +45,14 @@ BiblioH* creer_biblioH (int m) {
 }
 
 void liberer_biblioH(BiblioH* b) {
+	if (b == NULL) return;
+
 	for (int i=0; i<b->m; i++) {
 		liberer_livreH(b->T[i]);
 	}
+	free(b->T);
+	free(b);
+	
 }
 
 int fonctionHachage(int cle, int m) {
@@ -77,9 +82,11 @@ void afficher_livreH(LivreH* l) {
 void afficher_biblioH(BiblioH *b) {
 	if (b==NULL) return;
 	for (int i=0; i<b->m; i++) {
-		printf("indice %d: \n", i);
-		afficher_livreH(b->T[i]);
-		printf("\n\n");
+		if(b->T[i] != NULL) {
+			printf("indice %d: \n", i);
+			afficher_livreH(b->T[i]);
+			printf("\n\n");
+		}
 	}
 }
 
@@ -113,4 +120,71 @@ LivreH *recherche2H(BiblioH *b, char *titre){
 	return NULL;
 }
 
-//meme auteur
+BiblioH *recherche3H(BiblioH *b, char* auteur) {
+	BiblioH* res = creer_biblioH (b->m);
+	int cleHachage = fonctionHachage(fonctionClef(auteur), b->m);
+
+	LivreH* tmp = b->T[cleHachage];
+
+	while(tmp) {
+		if (strcmp(auteur, tmp->auteur)==0) {
+			insererH(res, tmp->num, tmp->titre, tmp->auteur);
+		}
+
+		tmp = tmp->suivant;
+	}
+	return res;
+}
+
+BiblioH *supprimerH(BiblioH *b, int num, char *titre, char* auteur) {
+	if (b==NULL) return NULL;
+
+	int cleHachage = fonctionHachage(fonctionClef(auteur), b->m);
+	LivreH* tmp = b->T[cleHachage];
+	LivreH* prec = NULL;
+
+	while(tmp) {
+		if ((tmp->num==num) && (strcmp(tmp->titre,titre)==0) && (strcmp(tmp->auteur,auteur)==0)) {
+			
+			if (prec == NULL) {
+				b->T[cleHachage] = tmp->suivant;
+			} else {
+				prec->suivant=tmp->suivant;
+			}
+
+			free(tmp->titre);
+			free(tmp->auteur);
+			free(tmp);
+
+			b->ne--;
+			return b;
+		}
+		prec = tmp;
+		tmp=tmp->suivant;
+	}
+	return b;
+} 
+
+BiblioH *fusionH(BiblioH *a, BiblioH *b) {
+	if (a==NULL) return NULL;
+	if (b==NULL) return a;
+
+	LivreH *tmp;
+
+	for (int i=0; i<b->m; i++) {
+		if(b->T[i] != NULL) {
+			tmp = b->T[i];
+			while(tmp) {
+				insererH(a, tmp->num, tmp->titre, tmp->auteur);
+				tmp = tmp->suivant;
+			}
+		}
+	}
+	liberer_biblioH(b);
+
+	return a;
+}
+
+BiblioH *recherche4H(BiblioH *a) {
+
+}

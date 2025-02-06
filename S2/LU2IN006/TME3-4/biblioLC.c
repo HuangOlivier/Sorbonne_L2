@@ -82,7 +82,7 @@ Livre *suprimer(Livre *l, int num, char* titre, char* auteur) {
 	Livre *prec = NULL;
 	
 	while (l) { 
-		if ((l->num==num) && (strcmp(l->titre,titre)) && (strcmp(l->auteur,auteur))) {
+		if ((l->num==num) && (strcmp(l->titre,titre)==0) && (strcmp(l->auteur,auteur)==0)) {
 			Livre *tmp = l;
 			
 			if(prec == NULL) {

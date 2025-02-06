@@ -24,8 +24,18 @@ int main(int argc, char** argv) {
 	BiblioH* hash = charger_n_entreesH(argv[1], atoi(argv[2]));
 
 	//afficher_biblioH(hash);
-	LivreH* t = recherche2H(hash, "HZKSSOFPWJEE");
-	afficher_livreH(t);
+	BiblioH* t = recherche3H(hash, "xyrivhpp");
+	BiblioH* c = recherche3H(hash, "bbqcwi");
+	
+	BiblioH* fusion = fusionH(t,c);
+	afficher_biblioH(fusion);
+	
+	liberer_biblio(LinkedList);
+	
+	liberer_biblioH(hash);
+	liberer_biblioH(fusion);
+	
+	
 	/*
 	int rep;
 	do {

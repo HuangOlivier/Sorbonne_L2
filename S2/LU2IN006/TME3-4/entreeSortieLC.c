@@ -15,6 +15,8 @@ Biblio* charger_n_entrees(char* nomfic, int n) {
  		sscanf(buffer, "%d %s %s",&num, titre, auteur);
 	 	inserer_en_tete(new, num, titre, auteur);
 	}
+	fclose(f);
+
 	return new;
 } 
 
@@ -46,6 +48,8 @@ BiblioH* charger_n_entreesH(char* nomfic, int n) {
  		sscanf(buffer, "%d %s %s",&num, titre, auteur);
 	 	insererH(new, num, titre, auteur);
 	}
+	
+	fclose(f);
 	return new;
 }
 
