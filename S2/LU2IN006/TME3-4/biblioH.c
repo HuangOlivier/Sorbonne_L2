@@ -186,5 +186,27 @@ BiblioH *fusionH(BiblioH *a, BiblioH *b) {
 }
 
 BiblioH *recherche4H(BiblioH *a) {
+	BiblioH* res = creer_biblioH (a->m);
+	LivreH* cour;
+	LivreH* tmp;
+	int count = 0;
+	for (int i=0; i<a->m; i++) {
+		cour = a->T[i];
+		while(cour) {
+			tmp=a->T[i];
 
+			while(tmp) {
+				if ((strcmp(cour->titre, tmp->titre)==0) && (strcmp(cour->auteur, tmp->auteur)==0) && (tmp != cour)) {
+					count++;
+				}
+				tmp = tmp->suivant;
+			}
+			if(count > 2){
+				insererH(res, cour->num, cour->titre, cour->auteur);
+				count = 0;
+			}
+			cour = cour->suivant;
+		}
+	}
+	return res;
 }

@@ -123,7 +123,7 @@ Biblio *recherche4(Biblio *a) {
 		int a=0;
 
 		while (tmp && (a==0)) {
-			if ((strcmp(now->titre, tmp->titre)==0) && (strcmp(now->auteur, tmp->auteur))){
+			if ((strcmp(now->titre, tmp->titre)==0) && (strcmp(now->auteur, tmp->auteur)==0)){
 				inserer_en_tete (res, tmp->num, tmp->titre, tmp->auteur);
 				a=1;
 			}

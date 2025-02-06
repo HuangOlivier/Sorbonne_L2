@@ -28,7 +28,10 @@ int main(int argc, char** argv) {
 	BiblioH* c = recherche3H(hash, "bbqcwi");
 	
 	BiblioH* fusion = fusionH(t,c);
-	afficher_biblioH(fusion);
+
+	BiblioH* dup = recherche4H(hash);
+
+	afficher_biblioH(dup);
 	
 	liberer_biblio(LinkedList);
 	
