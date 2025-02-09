@@ -20,17 +20,17 @@ LivreH* creer_livreH(int num, char* titre, char* auteur) {
 	new->suivant = NULL;
 
 	return new;
-	
 }
 
-void liberer_livreH(LivreH* l) {
-	if (l) {
-		free(l->titre);
-		free(l->auteur);
-		liberer_livreH(l->suivant);
-		free(l);
-	}
+
+void liberer_livreH(LivreH *l){
+	if (l==NULL) return;
+	free(l->titre);
+	free(l->auteur);
+	free(l);
 }
+
+
 
 BiblioH* creer_biblioH (int m) {
 	BiblioH* new = malloc(sizeof(BiblioH));
@@ -45,15 +45,22 @@ BiblioH* creer_biblioH (int m) {
 }
 
 void liberer_biblioH(BiblioH* b) {
-	if (b == NULL) return;
-
-	for (int i=0; i<b->m; i++) {
-		liberer_livreH(b->T[i]);
+	if (b) {
+		for (int i = 0; i < b->m; i++) {
+			LivreH* courant = b->T[i];
+			while (courant) {
+				LivreH* tmp = courant->suivant;
+				free(courant->titre);
+				free(courant->auteur);
+				free(courant);
+				courant = tmp;
+			}
+		}
+		free(b->T);
+		free(b);
 	}
-	free(b->T);
-	free(b);
-	
 }
+
 
 int fonctionHachage(int cle, int m) {
 	double A = (sqrt(5)-1)/2;

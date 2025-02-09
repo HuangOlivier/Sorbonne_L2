@@ -11,13 +11,11 @@ Livre* creer_livre(int num, char* titre, char* auteur){
 	return new;
 }
 
-void liberer_livre(Livre* l) {
-	if (l) {
-		free(l->titre);
-		free(l->auteur);
-		liberer_livre(l->suiv);
-		free(l);
-	}
+void liberer_livre(Livre *L){
+	if(L==NULL) return;
+	free(L->titre);
+	free(L->auteur);
+	free(L);
 }
 
 Biblio* creer_biblio() {
@@ -28,8 +26,14 @@ Biblio* creer_biblio() {
 
 void liberer_biblio(Biblio* b) {
 	if (b) {
-		liberer_livre(b->L);
-		free(b);
+		Livre* tmp = b->L;
+		Livre* t;
+		while (tmp) {
+			t = tmp->suiv;
+			liberer_livre(tmp);
+			tmp = t;
+		}
+		free(b); 
 	}
 }
 
@@ -65,40 +69,41 @@ Livre* recherche2(Livre *l, char *titre) {
 	recherche2(l->suiv, titre);
 }
 
-Biblio* recherche3(Livre *l, char* auteur) {
-	Biblio* new = creer_biblio();
-	
-	while (l) {
-		if (strcmp(auteur, l->auteur)==0) {
-			inserer_en_tete(new, l->num, l->titre, l->auteur);
+Biblio* recherche3(Biblio* b, char* auteur){
+	Biblio* newb = creer_biblio();
+	Livre* l = b->L;
+	while(l){
+		if(strcmp(auteur, l->auteur) == 0){
+			inserer_en_tete(newb, l->num, l->titre, auteur);
 		}
-		l=l->suiv;
+		l = l->suiv;
 	}
-	
+	return newb;
 }
 
-Livre *suprimer(Livre *l, int num, char* titre, char* auteur) {
-	if (l == NULL) return NULL;
-	Livre *prec = NULL;
-	
-	while (l) { 
-		if ((l->num==num) && (strcmp(l->titre,titre)==0) && (strcmp(l->auteur,auteur)==0)) {
-			Livre *tmp = l;
-			
-			if(prec == NULL) {
-				l=tmp->suiv;
-				free(tmp);
-			} else {
-				prec = l->suiv;
-				free(l);
-				l=prec;
-			}
-			return l;
-		}
-		prec = l;
-		l=l->suiv;
+
+void supprimer(Biblio* b, int num, char* titre, char* auteur){
+	if (b == NULL || b->L == NULL) {
+		printf("La bibliothèque est vide, suppression impossible.\n");
+		return;
 	}
-	return l;
+	
+	Livre* l = b->L;
+	if(l->num == num && strcmp(titre, l->titre) == 0 && strcmp(auteur, l->auteur) == 0){
+		b->L = l->suiv;
+		liberer_livre(l);
+		return;
+	}
+	Livre* tmp;
+	while(l){
+		if(l->num == num && strcmp(titre, l->titre) == 0 && strcmp(auteur, l->auteur) == 0){
+			tmp->suiv = l->suiv;
+			liberer_livre(l);
+			return;
+		}
+		tmp = l;
+		l = l->suiv;
+	}
 }
 
 Biblio *fusion(Biblio *a, Biblio *b) {

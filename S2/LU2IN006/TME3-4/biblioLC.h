@@ -25,9 +25,9 @@ void afficher_livre(Livre* l);
 void afficher_biblio(Biblio* b);
 Livre* recherche1(Livre *l, int num);
 Livre* recherche2(Livre *l, char *titre);
-Biblio* recherche3(Livre *l, char* auteur);
+Biblio* recherche3(Biblio* b, char* auteur);
 Biblio *fusion(Biblio *a, Biblio *b);
 Biblio *recherche4(Biblio *a);
-Livre *suprimer(Livre *l, int num, char* titre, char* auteur);
+void supprimer(Biblio* b, int num, char* titre, char* auteur);
 
 #endif
