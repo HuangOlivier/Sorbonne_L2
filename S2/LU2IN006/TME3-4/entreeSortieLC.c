@@ -1,6 +1,6 @@
 #include "entreeSortieLC.h"
-#include "biblioH.h"
 
+//Fonction qui permet de lire les n premières lignes du fichier "nomfic" (Liste chainée)
 Biblio* charger_n_entrees(char* nomfic, int n) {
 	FILE *f = fopen(nomfic, "r");
 	if (f == NULL) return NULL;
@@ -20,10 +20,10 @@ Biblio* charger_n_entrees(char* nomfic, int n) {
 	return new;
 } 
 
-
+//Fonction qui stock dans un fichier "nomfic" la bibliothèque b (Liste chainée)
 void enregistrer_biblio(Biblio *b, char* nomfic) {
 	FILE *f = fopen(nomfic, "w");
-	
+	if(f==NULL) return;
 	Livre* t = b->L;
 	while(t) {
 		fprintf(f,"%d %s %s\n",t->num, t->titre, t->auteur);
@@ -34,35 +34,3 @@ void enregistrer_biblio(Biblio *b, char* nomfic) {
 }
 
 
-BiblioH* charger_n_entreesH(char* nomfic, int n) {
-	FILE *f = fopen(nomfic, "r");
-	if (f == NULL) return NULL;
-	char buffer[555];
-	int num;
-	char titre[255];
-	char auteur[255];
-	BiblioH* new = creer_biblioH(n);
-	
-	for(int i=0; i<n; i++){
-	 	fgets(buffer, 555, f);
- 		sscanf(buffer, "%d %s %s",&num, titre, auteur);
-	 	insererH(new, num, titre, auteur);
-	}
-	
-	fclose(f);
-	return new;
-}
-
-void enregistrer_biblioH(BiblioH *b, char* nomfic) {
-	FILE *f = fopen(nomfic, "w");
-	
-	for (int i=0; i<b->m; i++) {
-		LivreH* tmp = b->T[i];
-		while(tmp) {
-			fprintf(f,"%d %s %s\n",tmp->num, tmp->titre, tmp->auteur);
-			tmp=tmp->suivant;
-		}
-	}
-	
-	fclose(f);
-}

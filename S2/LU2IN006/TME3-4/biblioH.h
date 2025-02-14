@@ -31,11 +31,11 @@ void liberer_biblioH(BiblioH* b);
 void insererH(BiblioH* b, int num, char* titre, char* auteur);
 void afficher_livreH(LivreH* l);
 void afficher_biblioH(BiblioH *b);
-LivreH *recherche1H(BiblioH *b, int num);
-LivreH *recherche2H(BiblioH *b, char *titre);
-BiblioH *recherche3H(BiblioH *b, char* auteur);
+LivreH *recherche_numH(BiblioH *b, int num);
+LivreH *recherche_titreH(BiblioH *b, char *titre);
+BiblioH *recherche_auteurH(BiblioH *b, char* auteur);
 BiblioH *supprimerH(BiblioH *b, int num, char *titre, char* auteur);
 BiblioH *fusionH(BiblioH *a, BiblioH *b);
-BiblioH *recherche4H(BiblioH *a);
+BiblioH *recherche_meme_ouvrageH(BiblioH *a);
 
 #endif

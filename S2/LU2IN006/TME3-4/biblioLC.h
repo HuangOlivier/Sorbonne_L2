@@ -23,11 +23,13 @@ void liberer_biblio(Biblio* b);
 void inserer_en_tete (Biblio* b, int num, char* titre, char* auteur);
 void afficher_livre(Livre* l);
 void afficher_biblio(Biblio* b);
-Livre* recherche1(Livre *l, int num);
-Livre* recherche2(Livre *l, char *titre);
-Biblio* recherche3(Biblio* b, char* auteur);
+
+Livre* recherche_num(Livre *l, int num);
+Livre* recherche_titre(Livre *l, char *titre);
+Biblio* recherche_auteur(Biblio* b, char* auteur);
 Biblio *fusion(Biblio *a, Biblio *b);
-Biblio *recherche4(Biblio *a);
+Biblio *recherche_meme_ouvrage(Biblio *a);
+
 void supprimer(Biblio* b, int num, char* titre, char* auteur);
 
 #endif

@@ -1,6 +1,7 @@
 #include "biblioH.h"
 #include <string.h>
 
+//Fonction qui calcul la clé associée à un auteur
 int fonctionClef(char* auteur) {
 	int cle = 0;
 
@@ -11,6 +12,7 @@ int fonctionClef(char* auteur) {
 	return cle;
 }
 
+//Fonction qui créer un livre en format livreH
 LivreH* creer_livreH(int num, char* titre, char* auteur) {
 	LivreH* new = malloc(sizeof(LivreH));
 
@@ -22,7 +24,7 @@ LivreH* creer_livreH(int num, char* titre, char* auteur) {
 	return new;
 }
 
-
+//Fonction qui libère UN seul livre
 void liberer_livreH(LivreH *l){
 	if (l==NULL) return;
 	free(l->titre);
@@ -31,7 +33,7 @@ void liberer_livreH(LivreH *l){
 }
 
 
-
+//Fonction qui créer une bibliothèque vide
 BiblioH* creer_biblioH (int m) {
 	BiblioH* new = malloc(sizeof(BiblioH));
 	new->ne=0;
@@ -44,15 +46,14 @@ BiblioH* creer_biblioH (int m) {
 	return new;
 }
 
+//Fonction qui libère toute la bibliothèque b
 void liberer_biblioH(BiblioH* b) {
 	if (b) {
 		for (int i = 0; i < b->m; i++) {
 			LivreH* courant = b->T[i];
 			while (courant) {
 				LivreH* tmp = courant->suivant;
-				free(courant->titre);
-				free(courant->auteur);
-				free(courant);
+				liberer_livreH(courant);
 				courant = tmp;
 			}
 		}
@@ -61,13 +62,15 @@ void liberer_biblioH(BiblioH* b) {
 	}
 }
 
-
+//Fonction qui calcul la valeur entière utiliser pour la table de hachage
 int fonctionHachage(int cle, int m) {
 	double A = (sqrt(5)-1)/2;
 	return (int) (m*(cle*A - (int) (cle*A) ));
 }
 
+//Fonction qui insère en tête le livreH dont les valeures sont passées en arguments
 void insererH(BiblioH* b, int num, char* titre, char* auteur) {
+	if (b == NULL) return;
 	int cle1 = fonctionClef(auteur);
 	int cleHachage = fonctionHachage(cle1, b->m);
 
@@ -79,6 +82,7 @@ void insererH(BiblioH* b, int num, char* titre, char* auteur) {
 	
 }
 
+//Fonction qui afficher le livreH l
 void afficher_livreH(LivreH* l) {
 	if(l) {
 		printf("%d %s %s\n", l->num, l->titre, l->auteur);
@@ -86,6 +90,7 @@ void afficher_livreH(LivreH* l) {
 	}
 }
 
+//Fonction qui affiche tous les ouvrages de la bibliothèque b
 void afficher_biblioH(BiblioH *b) {
 	if (b==NULL) return;
 	for (int i=0; i<b->m; i++) {
@@ -96,8 +101,8 @@ void afficher_biblioH(BiblioH *b) {
 		}
 	}
 }
-
-LivreH *recherche1H(BiblioH *b, int num){
+//Fonction qui renvoie un BiblioH dont le numero est num
+LivreH *recherche_numH(BiblioH *b, int num){
 	if (b==NULL) return NULL;
 	LivreH* tmp;
 	for (int i=0; i<b->m; i++) {
@@ -112,7 +117,8 @@ LivreH *recherche1H(BiblioH *b, int num){
 	return NULL;
 }
 
-LivreH *recherche2H(BiblioH *b, char *titre){
+//Fonction qui renvoie un BiblioH dont le titre est titre
+LivreH *recherche_titreH(BiblioH *b, char *titre){
 	if (b==NULL) return NULL;
 	LivreH* tmp;
 	for (int i=0; i<b->m; i++) {
@@ -127,7 +133,9 @@ LivreH *recherche2H(BiblioH *b, char *titre){
 	return NULL;
 }
 
-BiblioH *recherche3H(BiblioH *b, char* auteur) {
+//Fonction qui renvoie un BiblioH dont l'auteur est auteur
+BiblioH *recherche_auteurH(BiblioH *b, char* auteur) {
+	if(b==NULL) return NULL;
 	BiblioH* res = creer_biblioH (b->m);
 	int cleHachage = fonctionHachage(fonctionClef(auteur), b->m);
 
@@ -143,6 +151,7 @@ BiblioH *recherche3H(BiblioH *b, char* auteur) {
 	return res;
 }
 
+//Fonction qui supprime l'ouvrage dont les valeurs sont passées en argument
 BiblioH *supprimerH(BiblioH *b, int num, char *titre, char* auteur) {
 	if (b==NULL) return NULL;
 
@@ -159,9 +168,7 @@ BiblioH *supprimerH(BiblioH *b, int num, char *titre, char* auteur) {
 				prec->suivant=tmp->suivant;
 			}
 
-			free(tmp->titre);
-			free(tmp->auteur);
-			free(tmp);
+			liberer_livreH(tmp);
 
 			b->ne--;
 			return b;
@@ -171,7 +178,7 @@ BiblioH *supprimerH(BiblioH *b, int num, char *titre, char* auteur) {
 	}
 	return b;
 } 
-
+//Fonction qui fusionne deux BiblioH 
 BiblioH *fusionH(BiblioH *a, BiblioH *b) {
 	if (a==NULL) return NULL;
 	if (b==NULL) return a;
@@ -192,7 +199,8 @@ BiblioH *fusionH(BiblioH *a, BiblioH *b) {
 	return a;
 }
 
-BiblioH *recherche4H(BiblioH *a) {
+//Fonction qui recherche les ouvrages qui sont en plusieurs exemplaires dans a
+BiblioH *recherche_meme_ouvrageH(BiblioH *a) {
 	BiblioH* res = creer_biblioH (a->m);
 	LivreH* cour;
 	LivreH* tmp;

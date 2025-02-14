@@ -1,7 +1,8 @@
 #include "biblioLC.h"
-#include "entreeSortieLC.h"
-
 #include "biblioH.h"
+#include "entreeSortieLC.h"
+#include "entreeSortieH.h"
+
 
 #include <stdlib.h>
 #include <time.h>
@@ -15,73 +16,96 @@ void menu() {
 	printf("4 - Recherche Auteur\n");
 }
 
+char* trouver_titre_alea(int n, Livre* a){
+	char* rep = "";	
+	while (a && n>0) {
+		a=a->suiv;
+		n--;
+	}
+	return a->titre;
+}
 
+char* trouver_auteur_alea(int n, Livre* a){
+	char* rep = "";	
+	while (a && n>0) {
+		a=a->suiv;
+		n--;
+	}
+	
+	return a->auteur;
+}
 
-void TimeTest(char* nomfic, int taille_lc, int taille_H) {
+void main_run(Biblio* listC, BiblioH* hash, int randomN, char* titre, char* auteur){
 	clock_t start_time;
 	clock_t end_time;
 	double cpu_time;
-
-	Biblio* LinkedList = charger_n_entrees(nomfic, taille_lc);
-	BiblioH* hash = charger_n_entreesH(nomfic, taille_H);
-
-	int randomN = rand() % taille_lc;
-
+	
 	start_time = clock();
 	for (int i = 0; i < 150; i++) {
-		recherche1(LinkedList->L, randomN);
+		recherche_num(listC->L, randomN);
 	}
 	end_time = clock();
 	cpu_time = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
-	printf("Liste chainée: recherche 1 - %f \n", cpu_time);
+	printf("Liste chainée: recherche par numéro - %f \n", cpu_time);
 
 	start_time = clock();
 	for (int i = 0; i < 150; i++) {
-		recherche1H(hash, randomN);
+		recherche_numH(hash, randomN);
 	}
 	end_time = clock();
 	cpu_time = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
-	printf("Table de hachage: recherche 1 - %f \n", cpu_time);
-
+	printf("Table de hachage: recherche par numéro - %f \n", cpu_time);
 
 	start_time = clock();
 	for (int i = 0; i < 150; i++) {
-		recherche2(LinkedList->L, "YPQRXWOAWBMSYX");
+		recherche_titre(listC->L, titre);
 	}
 	end_time = clock();
 	cpu_time = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
-	printf("Liste chainée: recherche 2 - %f \n", cpu_time);
+	printf("Liste chainée: recherche par titre - %f \n", cpu_time);
 
 	start_time = clock();
 	for (int i = 0; i < 150; i++) {
-		recherche2H(hash, "YPQRXWOAWBMSYX");
+		recherche_titreH(hash, titre);
 	}
 	end_time = clock();
 	cpu_time = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
-	printf("Table de hachage: recherche 2 - %f \n", cpu_time);
-
-
+	printf("Table de hachage: recherche par titre - %f \n", cpu_time);
 
 	start_time = clock();
 	for (int i = 0; i < 300; i++) {
-		Biblio* res = recherche3(LinkedList, "exqb");
+		Biblio* res = recherche_auteur(listC, auteur); //Nom d'auteur qui n'est pas dans la liste
 		liberer_biblio(res);
 	}
 	end_time = clock();
 	cpu_time = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
-	printf("Liste chainée: recherche 3 - %f \n", cpu_time);
+	printf("Liste chainée: recherche meme auteur - %f \n", cpu_time);
 
 	start_time = clock();
 	for (int i = 0; i < 300; i++) {
-		BiblioH* res = recherche3H(hash, "exqb");
+		BiblioH* res = recherche_auteurH(hash, auteur);
 		liberer_biblioH(res);
 	}
 	end_time = clock();
 	cpu_time = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
-	printf("Table de hachage: recherche 3 - %f \n", cpu_time);
+	printf("Table de hachage: recherche meme auteur - %f \n", cpu_time);
+}
 
 
-	liberer_biblio(LinkedList);
+void TimeTest(char* nomfic, int taille_lc, int taille_H) {
+	Biblio* listC = charger_n_entrees(nomfic, taille_lc);
+	BiblioH* hash = charger_n_entreesH(nomfic, taille_H);
+
+	printf("Livre trouvable: \n\n");
+	int randomN = rand() % taille_lc;
+	char* auteur = trouver_auteur_alea(randomN, listC->L);
+	char* titre = trouver_titre_alea(randomN,listC->L);
+	main_run(listC, hash, randomN, titre, auteur);
+	
+	printf("\nLivre introuvable: \n\n");
+	main_run(listC, hash, taille_lc*2, "123456", "123456");
+	
+	liberer_biblio(listC);
 	liberer_biblioH(hash);
 }
 
@@ -141,7 +165,7 @@ int main(int argc, char** argv) {
 					printf("Recherche Auteur\n\n");
 					printf("Indiquez l'auteur recherché:\n");
 					if(scanf("%s", auteur)==1){
-						Biblio *res = recherche3(test, auteur);
+						Biblio *res = recherche_auteur(test, auteur);
 
 						if(res->L==NULL){
 							printf("\nIl n'y a pas d'ouvrage de cette Auteur disponible\n");
@@ -175,7 +199,7 @@ int main(int argc, char** argv) {
 				printf("1 - Q1 \n");
 				printf("2 - Q2 \n");
 				printf("3 - Q3 \n");
-				scanf("%d",&choix);
+				scanf("%d", &choix);
 			}
 
 			switch (choix) {
@@ -206,13 +230,13 @@ int main(int argc, char** argv) {
 							double temps_cpuH;
 
 							temps_init = clock();
-							Biblio* temp1 = recherche4(LinkedList);
+							Biblio* temp1 = recherche_meme_ouvrage(LinkedList);
 							temps_final=clock();
 							temps_cpuL = ((double)(temps_final - temps_init)) / CLOCKS_PER_SEC;
 
 
 							temps_init = clock();
-							BiblioH* temp2 = recherche4H(hash);
+							BiblioH* temp2 = recherche_meme_ouvrageH(hash);
 							temps_final=clock();
 							temps_cpuH = ((double)(temps_final - temps_init)) / CLOCKS_PER_SEC;
 
@@ -234,9 +258,5 @@ int main(int argc, char** argv) {
 				}
 		}while(choix);
 	}
-
 	return 0;
-	
 }
-
-
