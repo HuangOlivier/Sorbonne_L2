@@ -1,5 +1,10 @@
+/*
+ * Projet : Mini-Projet 2 : Gestion d’une bibliotheque
+ * Auteurs : 
+ *   - Andre Bertok (21204512)
+ *   - Olivier Huang (21206369)
+ */
 #include "biblioLC.h"
-#include <string.h>
 
 //fonction qui crée un livre
 Livre* creer_livre(int num, char* titre, char* auteur){
@@ -170,7 +175,6 @@ Biblio *recherche_meme_ouvrage(Biblio *a) {
 	
 		if (found) {
 			int deja_dedans = 0;
-
 			Livre* tmp_list_temp = deja_ajoute->L;
 
 			while (tmp_list_temp) {
@@ -181,7 +185,6 @@ Biblio *recherche_meme_ouvrage(Biblio *a) {
 				}
 				tmp_list_temp=tmp_list_temp->suiv;
 			}
-
 
 			if(deja_dedans == 0) {
 				inserer_en_tete(res, now->num, now->titre, now->auteur);
@@ -198,13 +201,10 @@ Biblio *recherche_meme_ouvrage(Biblio *a) {
 
 			}
 		}
-
 		now=now->suiv;
 	}
 
-
 	liberer_biblio(deja_ajoute);
-	
 	return res;
 }
 

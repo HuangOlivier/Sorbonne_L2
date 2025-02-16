@@ -1,5 +1,10 @@
+/*
+ * Projet : Mini-Projet 2 : Gestion d’une bibliotheque
+ * Auteurs : 
+ *   - Andre Bertok (21204512)
+ *   - Olivier Huang (21206369)
+ */
 #include "biblioH.h"
-#include <string.h>
 
 //Fonction qui calcul la clé associée à un auteur
 int fonctionClef(char* auteur) {

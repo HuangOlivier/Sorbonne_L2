@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # Charger le fichier CSV
-data = pd.read_csv("data.csv")
+data = pd.read_csv("data_original.csv")
 
 # Extraire les colonnes
 tailles = data["Taille"]

@@ -1,3 +1,9 @@
+/*
+ * Projet : Mini-Projet 2 : Gestion d’une bibliotheque
+ * Auteurs : 
+ *   - Andre Bertok (21204512)
+ *   - Olivier Huang (21206369)
+ */
 #include "biblioLC.h"
 #include "biblioH.h"
 #include "entreeSortieLC.h"
@@ -291,7 +297,7 @@ int main(int argc, char** argv) {
 						FILE *f = fopen("data.csv", "w");
 						fprintf(f,"Taille,Temps_Liste,Temps_Hash\n");
 
-						for (int n=10; n<=50000; n=n*2){
+						for (int n=10; n<=75000; n=n*2){
 							Biblio* LinkedList = charger_n_entrees(argv[1],n);
 							BiblioH* hash = charger_n_entreesH(argv[1], n/2);
 

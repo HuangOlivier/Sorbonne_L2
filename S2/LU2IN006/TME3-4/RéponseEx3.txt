@@ -1,0 +1,32 @@
+----------------------------------------------
+Structure de données
+LU2IN006 - TME3-4 : Gestion d'une bibliothèque
+Auteurs : 
+ *   - Andre Bertok (21204512)
+ *   - Olivier Huang (21206369)
+----------------------------------------------
+
+============================================
+EXERCICE 3 : Comparaison des deux structures
+============================================
+
+
+Question 1 :
+------------
+On ne vois pas trop de différence quand l'ouvrage est introuvable mais on remarque que:
+-Pour le numéro la table de hachage semble etre la plus rapide quand l'ouvrage existe car on ne vérifie pas chaque élément contrairement à la liste chainée.
+-Pour le titre la liste chainée semble en général plus rapide surement à cause de colision dans la table de hachage.
+-Pour l'auteur il ne semble pas pas y avoir de meilleure structure.
+
+
+Question 2 :
+------------
+
+Il semble que plus la table de hachage est grande plus le temps de recherche est long.
+
+Question 3-4 :
+--------------
+
+Voir temps_recherchhe_bibliotheque.png.
+La complexité de la liste chainée est en O(n) car dans le pire des cas on parcourt toute 
+la liste et pour la table de hachage O(1) si la table de hachage est bien gérer.
