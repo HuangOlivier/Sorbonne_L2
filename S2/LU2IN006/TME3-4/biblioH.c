@@ -16,6 +16,11 @@ int fonctionClef(char* auteur) {
 LivreH* creer_livreH(int num, char* titre, char* auteur) {
 	LivreH* new = malloc(sizeof(LivreH));
 
+	if (new == NULL) {
+        printf("Erreur: Allocation mémoire échouée\n");
+        return NULL;
+    }
+
 	new->num = num;
 	new->titre = strdup(titre);
 	new->auteur = strdup(auteur);
@@ -36,9 +41,21 @@ void liberer_livreH(LivreH *l){
 //Fonction qui créer une bibliothèque vide
 BiblioH* creer_biblioH (int m) {
 	BiblioH* new = malloc(sizeof(BiblioH));
+
+	if (new == NULL) {
+        printf("Erreur: Allocation mémoire échouée\n");
+        return NULL;
+    }
+
 	new->ne=0;
 	new->m = m;
 	new->T = malloc(sizeof(LivreH*)*m);
+
+	if (new->T == NULL) {
+		printf("Erreur: Allocation mémoire échouée\n");
+        return NULL;
+	}
+
 	for (int i=0; i<m; i++){
 		new->T[i] = NULL;
 	}
@@ -205,6 +222,7 @@ BiblioH *recherche_meme_ouvrageH(BiblioH *a) {
 	LivreH* cour;
 	LivreH* tmp;
 	int count = 0;
+
 	for (int i=0; i<a->m; i++) {
 		cour = a->T[i];
 		while(cour) {
@@ -212,16 +230,33 @@ BiblioH *recherche_meme_ouvrageH(BiblioH *a) {
 
 			while(tmp) {
 				if ((strcmp(cour->titre, tmp->titre)==0) && (strcmp(cour->auteur, tmp->auteur)==0) && (tmp != cour)) {
-					count++;
+					count=1;
+					break;
 				}
 				tmp = tmp->suivant;
 			}
-			if(count > 2){
+
+			if(count > 0){
 				insererH(res, cour->num, cour->titre, cour->auteur);
 				count = 0;
 			}
+
 			cour = cour->suivant;
 		}
 	}
 	return res;
 }
+
+
+/*
+
+KEZXDU - xdrwv → Numéros : 3, 544, 2261, 4211
+RATCRMEHGJAEKJNQ - udlmeszkllz → Numéros : 9022, 14777, 14855
+UBBMLGFHSLOPGS - wmninq → Numéros : 36181, 36247
+MGGEGRKHEESIX - ufrlkzmi → Numéros : 99472, 99538, 99662
+TLQC - gnesn → Numéros : 99717, 99769
+OBUFHP - jbevej → Numéros : 99811, 99846
+DJGEYOPXIUHLPPMBKU - joaobakcv → Numéros : 99872, 99906
+
+
+*/

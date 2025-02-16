@@ -4,6 +4,12 @@
 //fonction qui crée un livre
 Livre* creer_livre(int num, char* titre, char* auteur){
 	Livre* new = malloc(sizeof(Livre));
+	
+	if (new == NULL) {
+        printf("Erreur: Allocation mémoire échouée\n");
+        return NULL;
+    }
+
 	new-> num = num;
 	new->titre = strdup(titre); //allouer et initialiser en mémoire d'un char*
 	new->auteur = strdup(auteur); //allouer et initialiser en mémoire d'un char*
@@ -23,6 +29,12 @@ void liberer_livre(Livre *L){
 //Fonction pour crée une bibliothèque vide
 Biblio* creer_biblio() {
 	Biblio* new = malloc(sizeof(Biblio));
+
+	if (new == NULL) {
+        printf("Erreur: Allocation mémoire échouée\n");
+        return NULL;
+    }
+
 	new->L = NULL;
 	return new;
 }
@@ -72,7 +84,7 @@ Livre* recherche_num(Livre *l, int num) {
 	if (l == NULL) return NULL;
 	if (l->num == num) return l;
 	
-	recherche_num(l->suiv, num);
+	return recherche_num(l->suiv, num);
 }
 
 //Fonction pour rechercher un livre dont le titre est titre
@@ -80,7 +92,7 @@ Livre* recherche_titre(Livre *l, char *titre) {
 	if (l == NULL) return NULL;
 	if (strcmp(titre, l->titre)==0) return l;
 	
-	recherche_titre(l->suiv, titre);
+	return recherche_titre(l->suiv, titre);
 }
 
 //Fonction pour rechercher un livre dont l'auteur est auteur
@@ -138,22 +150,61 @@ Biblio *fusion(Biblio *a, Biblio *b) {
 //Fonction qui recherche les livre qui sont en plusieurs exemplaires
 Biblio *recherche_meme_ouvrage(Biblio *a) {
 	if(a == NULL) return NULL;
+
 	Biblio* res = creer_biblio();
 	Livre* now = a->L;
+
 	Livre* tmp;
+	Biblio* deja_ajoute = creer_biblio();
 
 	while(now) {
-		tmp= a->L;
-		int a=0;
-		while (tmp && (a==0)) {
+		tmp= now->suiv;
+		int found = 0;
+		while (tmp) {
 			if ((strcmp(now->titre, tmp->titre)==0) && (strcmp(now->auteur, tmp->auteur)==0)){
-				inserer_en_tete (res, tmp->num, tmp->titre, tmp->auteur);
-				a=1;
+				found = 1;
+				break;
 			}
 			tmp=tmp->suiv;
 		}
+	
+		if (found) {
+			int deja_dedans = 0;
+
+			Livre* tmp_list_temp = deja_ajoute->L;
+
+			while (tmp_list_temp) {
+				
+				if ((strcmp(now->titre, tmp_list_temp->titre)==0) && (strcmp(now->auteur, tmp_list_temp->auteur)==0) && ( now->num == tmp_list_temp->num)) {
+					deja_dedans=1;
+					break;
+				}
+				tmp_list_temp=tmp_list_temp->suiv;
+			}
+
+
+			if(deja_dedans == 0) {
+				inserer_en_tete(res, now->num, now->titre, now->auteur);
+                inserer_en_tete(deja_ajoute, now->num, now->titre, now->auteur);
+		
+				tmp = now->suiv;
+				while (tmp) {
+					if ((strcmp(now->titre, tmp->titre) == 0) && (strcmp(now->auteur, tmp->auteur) == 0)  /* && (now->num != tmp->num)*/ ) {
+						inserer_en_tete(res, tmp->num, tmp->titre, tmp->auteur);
+						inserer_en_tete(deja_ajoute, tmp->num, tmp->titre, tmp->auteur);
+					}
+					tmp = tmp->suiv;
+				}
+
+			}
+		}
+
 		now=now->suiv;
 	}
+
+
+	liberer_biblio(deja_ajoute);
+	
 	return res;
 }
 

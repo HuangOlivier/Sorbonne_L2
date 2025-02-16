@@ -4,7 +4,12 @@
 //Fonction qui permet de lire les n premières lignes du fichier "nomfic" (Table de hachage)
 BiblioH* charger_n_entreesH(char* nomfic, int n) {
 	FILE *f = fopen(nomfic, "r");
-	if (f == NULL) return NULL;
+
+	if (f == NULL) {
+		printf("Erreur: Impossible d'ouvrir le fichier %s\n", nomfic);
+		return NULL;
+	}
+
 	char buffer[555];
 	int num;
 	char titre[255];
@@ -24,7 +29,12 @@ BiblioH* charger_n_entreesH(char* nomfic, int n) {
 //Fonction qui stock dans un fichier "nomfic" la bibliothèque b (Table de hachage)
 void enregistrer_biblioH(BiblioH *b, char* nomfic) {
 	FILE *f = fopen(nomfic, "w");
-	if(f==NULL) return;
+
+	if (f == NULL) {
+		printf("Erreur: Impossible d'ouvrir le fichier %s\n", nomfic);
+		return;
+	}
+
 	for (int i=0; i<b->m; i++) {
 		LivreH* tmp = b->T[i];
 		while(tmp) {

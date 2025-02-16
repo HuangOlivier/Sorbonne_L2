@@ -14,8 +14,11 @@ void menu() {
 	printf("2 - Inserer ouvrage \n");
 	printf("3 - Supprimer Ouvrage\n");
 	printf("4 - Recherche Auteur\n");
+	printf("5 - Enregistrer Biblio\n");
+	printf("6 - Recherche ouvrages en plusieurs exemplaires\n");
 }
 
+// Fonction pour trouver le titre d'un livre de manière aléatoire en parcourant la liste
 char* trouver_titre_alea(int n, Livre* a){
 	char* rep = "";	
 	while (a && n>0) {
@@ -25,6 +28,7 @@ char* trouver_titre_alea(int n, Livre* a){
 	return a->titre;
 }
 
+// Fonction pour trouver l'auteur d'un livre de manière aléatoire en parcourant la liste
 char* trouver_auteur_alea(int n, Livre* a){
 	char* rep = "";	
 	while (a && n>0) {
@@ -35,6 +39,10 @@ char* trouver_auteur_alea(int n, Livre* a){
 	return a->auteur;
 }
 
+
+// Fonction qui exécute plusieurs tests de recherche sur une bibliothèque sous forme 
+// de liste chaînée et de table de hachage. Elle mesure le temps d'exécution des 
+// recherches par numéro, titre et auteur, et compare les performances des deux structures.
 void main_run(Biblio* listC, BiblioH* hash, int randomN, char* titre, char* auteur){
 	clock_t start_time;
 	clock_t end_time;
@@ -79,7 +87,7 @@ void main_run(Biblio* listC, BiblioH* hash, int randomN, char* titre, char* aute
 	}
 	end_time = clock();
 	cpu_time = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
-	printf("Liste chainée: recherche meme auteur - %f \n", cpu_time);
+	printf("Liste chainée: recherche auteur - %f \n", cpu_time);
 
 	start_time = clock();
 	for (int i = 0; i < 300; i++) {
@@ -88,21 +96,26 @@ void main_run(Biblio* listC, BiblioH* hash, int randomN, char* titre, char* aute
 	}
 	end_time = clock();
 	cpu_time = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
-	printf("Table de hachage: recherche meme auteur - %f \n", cpu_time);
+	printf("Table de hachage: recherche auteur - %f \n", cpu_time);
 }
 
-
+// Fonction principale de test qui charge une bibliothèque depuis un fichier et 
+// exécute des recherches en appelant main_run. Elle effectue des tests avec 
+// un livre existant et un livre inexistant pour comparer les performances.
 void TimeTest(char* nomfic, int taille_lc, int taille_H) {
 	Biblio* listC = charger_n_entrees(nomfic, taille_lc);
 	BiblioH* hash = charger_n_entreesH(nomfic, taille_H);
 
-	printf("Livre trouvable: \n\n");
+	printf("\n\n----------------------\n");
+	printf("Livre trouvable: \n");
+	printf("----------------------\n\n");
 	int randomN = rand() % taille_lc;
 	char* auteur = trouver_auteur_alea(randomN, listC->L);
 	char* titre = trouver_titre_alea(randomN,listC->L);
 	main_run(listC, hash, randomN, titre, auteur);
-	
-	printf("\nLivre introuvable: \n\n");
+	printf("\n\n----------------------\n");
+	printf("Livre introuvable: \n");
+	printf("----------------------\n\n");
 	main_run(listC, hash, taille_lc*2, "123456", "123456");
 	
 	liberer_biblio(listC);
@@ -111,80 +124,113 @@ void TimeTest(char* nomfic, int taille_lc, int taille_H) {
 
 
 int main(int argc, char** argv) {
+	// Vérification du nombre d'arguments
 	if(argc != 3){
-		printf("pas assez d'argument\n");
+		printf("Erreur : nombre d'arguments incorrect.\n");
+        printf("Utilisation : %s <nom_fichier> <taille>\n", argv[0]);
 		return -1;
 	}
 
+	char buffer[256];
 	int choix = -1;
-	while (choix != 1 && choix != 2) {
-		printf("Partie 1 ou 2: ");
-		scanf("%d",&choix);
+
+	// Sélection de la partie à exécuter (quel question)
+	while (choix != 1 && choix != 3) {
+		printf("Choisissez une partie (1 ou 3) : ");
+		char choix_str[10];
+		fgets(choix_str, sizeof(choix_str), stdin);
+		choix = atoi(choix_str);
 	}
 
+	//Partie 1 et 2
 	if(choix == 1) {
 		Biblio *test = charger_n_entrees(argv[1],atoi(argv[2]));
 		int action;
 		int num;
 		char titre[256];
 		char auteur[256];
+
 		do{
 			menu();
 			printf("entrée une action:\n");
-			scanf("%d", &action);
+			char action_str[10];
+			fgets(action_str, sizeof(action_str), stdin);
+			action = atoi(action_str);
+
 			switch (action){
 				case 1:
-					printf("Affichage:\n");
+					printf("Affichage de la bibliothèque :\n");
 					afficher_biblio(test);
 					printf("\n");
 					break;
 				case 2:
-					printf("Inserer ouvrage \n\n");
-					printf("Indiquez le Numéro, Titre et Auteur:\n");
-					if(scanf("%d %s %s",&num,titre,auteur)==3){
-						printf("%s\n",auteur);
+					printf("Insertion d'un ouvrage\n\n");
+					printf("Indiquez le Numéro, Titre et Auteur: \n");
+					fgets(buffer, sizeof(buffer), stdin);
+					if(sscanf(buffer, "%d %s %s", &num, titre, auteur) == 3){
 						inserer_en_tete(test, num, titre, auteur);
 						printf("Ajout réussi\n\n");
-					}
-					else{
+					} else {
 						printf("Erreur de format\n");
 					}
 					break;
+
 				case 3:
-					printf("Supprimer Ouvrage\n\n");
+					printf("Suppression d'un ouvrage\n\n");
 					printf("Indiquez le Numéro, Titre et Auteur:\n");
-					if(scanf("%d %s %s",&num,titre,auteur)==3){
+					fgets(buffer, sizeof(buffer), stdin);
+					if(sscanf(buffer, "%d %s %s", &num, titre, auteur) == 3){
 						supprimer(test,num,titre,auteur);
 						printf("Suppression réussi\n\n");
-					}
-					else{
+					} else {
 						printf("Erreur de format\n");
 					}
 					break;
 				case 4:
-					printf("Recherche Auteur\n\n");
-					printf("Indiquez l'auteur recherché:\n");
-					if(scanf("%s", auteur)==1){
-						Biblio *res = recherche_auteur(test, auteur);
+					printf("Recherche d'ouvrages par auteur\n\n");
+					printf("Indiquez le nom de l'auteur recherché:\n");
+					fgets(auteur, sizeof(auteur), stdin);
+					auteur[strcspn(auteur, "\n")] = 0;   //on enleve le caractère \n car la touche entrée ajoute un \n si le buffer n'est pas entierement utilisé
+					Biblio *res = recherche_auteur(test, auteur);
 
-						if(res->L==NULL){
-							printf("\nIl n'y a pas d'ouvrage de cette Auteur disponible\n");
-						} else{
-							printf("\nVoici les ouvrages de cette Auteur disponible:\n\n");
-							afficher_biblio(res);
-							printf("\n");
-						}
-						liberer_biblio(res);
+					if(res->L == NULL){
+						printf("\nAucun ouvrage trouvé pour cet auteur\n");
+					} else{
+						printf("\nOuvrages disponibles pour cet auteur :\n\n");
+						afficher_biblio(res);
+						printf("\n");
 					}
-					
+					liberer_biblio(res);
+					break;
+
+				case 5:
+					printf("Enregistrement de la bibliothèque\n\n");
+					printf("Indiquez le nom du fichier :\n");
+					fgets(buffer, sizeof(buffer), stdin);
+					buffer[strcspn(buffer, "\n")] = 0;  // Supprime le retour à la ligne
+
+					enregistrer_biblio(test, buffer);
+					printf("Bibliothèque enregistrée dans '%s'\n\n", buffer);
+					break;
+				case 6:
+					printf("Recherche des ouvrages en plusieurs exemplaires...\n");
+					Biblio *duplicates = recherche_meme_ouvrage(test);
+					if (duplicates->L == NULL) {
+						printf("\nAucun ouvrage en double trouvé.\n");
+					} else {
+						printf("\nListe des ouvrages ayant plusieurs exemplaires :\n");
+						afficher_biblio(duplicates);
+						printf("\n");
+					}
+					liberer_biblio(duplicates);
 					break;
 			}
 		}while(action);
+
 		printf("Sortie du programme \n");
-		
 		liberer_biblio(test);
 
-	} else {
+	} else { // Partie 3 : Exécution des tests de performance
 
 		clock_t temps_init;
 		clock_t temps_final;
@@ -193,32 +239,55 @@ int main(int argc, char** argv) {
 		int choix;
 		do{
 			choix = -1;
-			while (choix != 1 && choix != 2 && choix != 3 && choix !=0) {
+			while (choix !=0 && choix != 1 && choix != 2 && choix != 3 && choix != 4) {
 				printf("\n\nOption:\n");
 				printf("0 - Sortie du programme\n");
 				printf("1 - Q1 \n");
 				printf("2 - Q2 \n");
-				printf("3 - Q3 \n");
-				scanf("%d", &choix);
+				printf("3 - Q3-Q4 \n");
+				printf("4 - Recherche ouvrages en plusieurs exemplaires\n");
+				char choix_str[10];
+				fgets(choix_str, sizeof(choix_str), stdin);
+				choix = atoi(choix_str);
 			}
 
 			switch (choix) {
-				case 1: {
+				case 1: 
 					TimeTest(argv[1], atoi(argv[2]), atoi(argv[2]));
-				}
-				break;
 
-				case 2: {
+					printf("\n\n==================\n");
+                    printf("Observations :\n");
+                    printf("- La recherche par numéro est plus rapide avec la table de hachage car elle évite de parcourir tous les éléments, contrairement à la liste chaînée.\n");
+                    printf("- La recherche par titre est parfois plus rapide en liste chaînée, probablement en raison de collisions dans la table de hachage.\n");
+                    printf("- Quand l'ouvrage est introuvable, la différence de performance est moins marquée.\n");
+                    printf("==================\n");
+					
+					break;
+
+				case 2: { 
 					int tailles[] = {100, 500, 1000, 5000, 10000, 50000};
 					
 					for (int i = 0; i < 6; i++) {
+						printf("\n\n==================\n");
 						printf("\nTaille list: %d, taille table de hachage: %d\n\n", atoi(argv[2]), tailles[i]);
+						printf("==================\n");
 						TimeTest(argv[1], atoi(argv[2]), tailles[i]);
 					}
+					printf("\n\n==================\n");
+					printf("Analyse des performances :\n");
+					printf("==================\n\n");
+
+					printf("- Recherche par numéro : La table de hachage est rapide au début, mais devient inefficace avec une grande taille.\n");
+					printf("- Recherche par titre : La liste chaînée est globalement plus rapide, la table de hachage souffre des collisions.\n");
+					printf("- Recherche par auteur : La liste chaînée reste stable, la table de hachage se dégrade fortement.\n\n");
+
+					printf("Conclusion : La table de hachage n'est efficace que pour une petite taille. La liste chaînée est plus fiable.\n");
+					printf("==================\n\n");
+
 				}
 				break;
 
-				case 3: {
+				case 3: { 
 						FILE *f = fopen("data.csv", "w");
 						fprintf(f,"Taille,Temps_Liste,Temps_Hash\n");
 
@@ -253,10 +322,51 @@ int main(int argc, char** argv) {
 
 						fclose(f);
 					}
-					
+
+					printf("Complexité :\n");
+					printf("- Liste chaînée : O(n) dans le pire des cas.\n");
+					printf("- Table de hachage : O(1) si bien gérée, mais peut augmenter avec les collisions.\n");
+				
 				break;
-				}
+
+				case 4:
+					printf("\nRecherche des ouvrages en plusieurs exemplaires...\n");
+					BiblioH* biblio = charger_n_entreesH(argv[1], atoi(argv[2]));
+
+					if (biblio == NULL) {
+						printf("Erreur : Impossible de charger la bibliothèque.\n");
+						break;
+					}
+
+					// Rechercher les ouvrages en plusieurs exemplaires
+					BiblioH* doublons = recherche_meme_ouvrageH(biblio);
+
+					int has_duplicates = 0;
+					for (int i = 0; i < doublons->m; i++) {
+						if (doublons->T[i] != NULL) { 
+							has_duplicates = 1;
+							break;
+						}
+					}
+
+					 if (!has_duplicates) {
+						printf("\nAucun ouvrage avec plusieurs exemplaires trouvé.\n");
+					} else {
+						printf("\nListe des ouvrages ayant plusieurs exemplaires :\n");
+						afficher_biblioH(doublons);
+						printf("\n");
+					}
+
+					// Libération de la mémoire
+					liberer_biblioH(doublons);
+					liberer_biblioH(biblio);
+					break;
+
+			}
 		}while(choix);
 	}
+
 	return 0;
 }
+
+

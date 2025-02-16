@@ -3,7 +3,12 @@
 //Fonction qui permet de lire les n premières lignes du fichier "nomfic" (Liste chainée)
 Biblio* charger_n_entrees(char* nomfic, int n) {
 	FILE *f = fopen(nomfic, "r");
-	if (f == NULL) return NULL;
+
+	if(f == NULL) {
+		printf("Erreur: Impossible d'ouvrir le fichier %s\n", nomfic);
+		return NULL;
+	}
+
 	char buffer[555];
 	int num;
 	char titre[255];
@@ -23,7 +28,12 @@ Biblio* charger_n_entrees(char* nomfic, int n) {
 //Fonction qui stock dans un fichier "nomfic" la bibliothèque b (Liste chainée)
 void enregistrer_biblio(Biblio *b, char* nomfic) {
 	FILE *f = fopen(nomfic, "w");
-	if(f==NULL) return;
+
+	if(f == NULL) {
+		printf("Erreur: Impossible d'ouvrir le fichier %s\n", nomfic);
+		return;
+	}
+
 	Livre* t = b->L;
 	while(t) {
 		fprintf(f,"%d %s %s\n",t->num, t->titre, t->auteur);
