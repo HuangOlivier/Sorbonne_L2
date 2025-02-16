@@ -10,23 +10,35 @@ Auteurs :
 EXERCICE 3 : Comparaison des deux structures
 ============================================
 
-
 Question 1 :
 ------------
-On ne vois pas trop de différence quand l'ouvrage est introuvable mais on remarque que:
--Pour le numéro la table de hachage semble etre la plus rapide quand l'ouvrage existe car on ne vérifie pas chaque élément contrairement à la liste chainée.
--Pour le titre la liste chainée semble en général plus rapide surement à cause de colision dans la table de hachage.
--Pour l'auteur il ne semble pas pas y avoir de meilleure structure.
 
+Observations :
+    - La recherche par numéro est plus rapide avec la table de hachage car elle évite de parcourir tous les éléments, contrairement à la liste chaînée
+    - Liste chaînée plus efficace pour la recherche par titre et auteur
+    - Quand l'ouvrage est introuvable, la différence est moins marquée, avec parfois un léger avantage pour la liste chaînée
 
 Question 2 :
 ------------
 
-Il semble que plus la table de hachage est grande plus le temps de recherche est long.
+Observations :
+
+    - Recherche par numéro : La table de hachage est très rapide pour une petite taille (100-1000) mais devient inefficace au-delà de 10 000 entrées.
+    - Recherche par titre et auteur : La liste chaînée est plus stable, tandis que la table de hachage souffre des collisions et se dégrade avec la taille.
+    - Livre introuvable : La table de hachage est rapide au début, mais inefficace avec une grande taille en raison des entrées vides et des collisions.
+
+Conclusion :
+    - La table de hachage est efficace uniquement pour une taille intermédiaire (1000-5000), surtout pour la recherche par numéro.
+    - Au-delà de 10 000 entrées, la liste chaînée devient plus fiable et stable, notamment pour la recherche par titre et auteur.
+
+
 
 Question 3-4 :
 --------------
 
 Voir temps_recherchhe_bibliotheque.png.
-La complexité de la liste chainée est en O(n) car dans le pire des cas on parcourt toute 
-la liste et pour la table de hachage O(1) si la table de hachage est bien gérer.
+
+Resultat :
+    - La complexité en O(n) de la liste chaînée est bien confirmée : plus la bibliothèque grandit, plus le temps de recherche augmente linéairement.
+    - La table de hachage, en théorie 𝑂(1), reste rapide tant qu'elle est bien dimensionnée. Toutefois, des collisions excessives pourraient la ralentir.
+    - Le graphe montre clairement ces tendances : la liste chaînée devient inefficace à grande échelle, tandis que la table de hachage reste stable et performante, justifiant son avantage pour de grandes bibliothèques.

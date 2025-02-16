@@ -261,11 +261,14 @@ int main(int argc, char** argv) {
 				case 1: 
 					TimeTest(argv[1], atoi(argv[2]), atoi(argv[2]));
 
+					
+					
+					
 					printf("\n\n==================\n");
                     printf("Observations :\n");
-                    printf("- La recherche par numéro est plus rapide avec la table de hachage car elle évite de parcourir tous les éléments, contrairement à la liste chaînée.\n");
-                    printf("- La recherche par titre est parfois plus rapide en liste chaînée, probablement en raison de collisions dans la table de hachage.\n");
-                    printf("- Quand l'ouvrage est introuvable, la différence de performance est moins marquée.\n");
+                    printf("- La recherche par numéro est plus rapide avec la table de hachage car elle évite de parcourir tous les éléments, contrairement à la liste chaînée\n");
+                    printf("- Liste chaînée plus efficace pour la recherche par titre et auteur");
+                    printf("- Quand l'ouvrage est introuvable, la différence est moins marquée, avec parfois un léger avantage pour la liste chaînée\n");
                     printf("==================\n");
 					
 					break;
@@ -283,9 +286,10 @@ int main(int argc, char** argv) {
 					printf("Analyse des performances :\n");
 					printf("==================\n\n");
 
-					printf("- Recherche par numéro : La table de hachage est rapide au début, mais devient inefficace avec une grande taille.\n");
-					printf("- Recherche par titre : La liste chaînée est globalement plus rapide, la table de hachage souffre des collisions.\n");
-					printf("- Recherche par auteur : La liste chaînée reste stable, la table de hachage se dégrade fortement.\n\n");
+					
+					printf("- Recherche par numéro : La table de hachage est très rapide pour une petite taille (100-1000) mais devient inefficace au-delà de 10 000 entrées.\n");
+					printf("- Recherche par titre et auteur : La liste chaînée est plus stable, tandis que la table de hachage souffre des collisions et se dégrade avec la taille.\n");
+					printf("- Livre introuvable : La table de hachage est rapide au début, mais inefficace avec une grande taille en raison des entrées vides et des collisions.\n\n");
 
 					printf("Conclusion : La table de hachage n'est efficace que pour une petite taille. La liste chaînée est plus fiable.\n");
 					printf("==================\n\n");
@@ -330,9 +334,8 @@ int main(int argc, char** argv) {
 					}
 
 					printf("Complexité :\n");
-					printf("- Liste chaînée : O(n) dans le pire des cas.\n");
-					printf("- Table de hachage : O(1) si bien gérée, mais peut augmenter avec les collisions.\n");
-				
+					printf("- La complexité en O(n) de la liste chaînée est bien confirmée : plus la bibliothèque grandit, plus le temps de recherche augmente linéairement.\n");
+					printf("- La table de hachage, en théorie 𝑂(1), reste rapide tant qu'elle est bien dimensionnée. Toutefois, des collisions excessives pourraient la ralentir.\n");
 				break;
 
 				case 4:
