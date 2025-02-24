@@ -1,7 +1,6 @@
 <?php
 /// Fonction de connexion pour serveur POP3
 /// Timeout de 5 secondes (300s en std)
-include "requeter_en_pop.php";
 
 function ouvrir_session_pop ($server, $user, $pass, $port=110)
 {
