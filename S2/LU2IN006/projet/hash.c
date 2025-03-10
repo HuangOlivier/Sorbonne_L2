@@ -20,6 +20,7 @@ int h(const char *str, int i) {
 HashMap *hashmap_create() {
 	HashMap *new = malloc(sizeof(HashMap));
 	new->size = TABLE_SIZE;
+	new->current_mem = 0;
 	new->table = malloc(sizeof(HashEntry*) * TABLE_SIZE);
 	
 	for (int i=0; i < TABLE_SIZE; i++) {

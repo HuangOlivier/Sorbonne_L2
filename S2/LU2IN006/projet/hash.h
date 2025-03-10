@@ -12,6 +12,7 @@ typedef struct hashentry {
 
 typedef struct hashmap {
 	int size;
+	int current_mem;
 	HashEntry* table;
 } HashMap;
 
