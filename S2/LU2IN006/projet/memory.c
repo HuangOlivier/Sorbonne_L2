@@ -16,7 +16,7 @@ MemoryHandler *memory_init(int size) {
 	return new;
 	//void **memory ?
 }
-
+fef
 Segment* find_free_segment(MemoryHandler* handler, int start, int size, Segment** prev) {
 	Segment* tmp = handler->free_list;
 	Segment* prec = NULL;
